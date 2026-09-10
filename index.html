@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Module International — инжиниринг под NDA</title>
+<meta name="description" content="Входим в бизнес под NDA и решаем то, что мешает ему расти: диагностика, программное обеспечение, автоматизация процессов, работа с руководителями и командой.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://smart-module-international.ru/">
+<meta name="theme-color" content="#071525">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="assets/site.webmanifest">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Smart Module International">
+<meta property="og:url" content="https://smart-module-international.ru/">
+<meta property="og:title" content="Smart Module International — инжиниринг под NDA">
+<meta property="og:description" content="Входим в бизнес под NDA и решаем то, что мешает ему расти: диагностика, ПО, автоматизация, работа с командой.">
+<meta property="og:image" content="https://smart-module-international.ru/assets/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Smart Module International — инжиниринг под NDA">
+<meta name="twitter:description" content="Входим в бизнес под NDA и решаем то, что мешает ему расти.">
+<meta name="twitter:image" content="https://smart-module-international.ru/assets/og-image.jpg">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "ООО «СМИ» (Смарт Модуль Интернэшнл)",
+  "alternateName": "Smart Module International",
+  "url": "https://smart-module-international.ru/",
+  "logo": "https://smart-module-international.ru/assets/icon-512.png",
+  "telephone": "+7-916-000-16-68",
+  "email": "sm.international@yandex.ru",
+  "taxID": "5031164520",
+  "vatID": "503101001",
+  "address": { "@type": "PostalAddress", "addressCountry": "RU" }
+}
+</script>
+<style>
+  :root{
+    --navy-deep:#071525;
+    --navy-dark:#0B2238;
+    --tech-blue:#0878D1;
+    --electric:#16A8FF;
+    --white:#F7F9FC;
+    --lbg:#E8F0F6;
+    --graphite:#182532;
+    --line: rgba(24,37,50,0.14);
+    --line-on-dark: rgba(255,255,255,0.14);
+    --muted:#5C6B7A;
+    --muted-on-dark:#93A6BC;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--white); color:var(--graphite); font-family:'IBM Plex Sans', system-ui, sans-serif; -webkit-font-smoothing:antialiased;}
+  h1,h2,h3{margin:0; text-wrap:balance;}
+  h1,h2{font-family:'Archivo',sans-serif; font-weight:800; letter-spacing:-0.025em;}
+  h3{font-family:'IBM Plex Sans',sans-serif; font-weight:600; letter-spacing:-0.005em;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  a{color:inherit;}
+  .wrap{max-width:1240px; margin:0 auto; padding:0 40px;}
+  section{padding:120px 0;}
+  .label{font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12px; letter-spacing:.14em; text-transform:uppercase;}
+
+  /* header */
+  header{position:fixed; top:0; left:0; right:0; z-index:50; transition:background .35s ease, border-color .35s ease, padding .35s ease;}
+  .navrow{display:flex; align-items:center; justify-content:space-between; padding:28px 0;}
+  header.scrolled .navrow{padding:16px 0;}
+  header.scrolled{background:rgba(247,249,252,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
+  .brand{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; letter-spacing:.04em; color:#fff; transition:color .35s ease;}
+  header.scrolled .brand{color:var(--graphite);}
+  .brand span{color:var(--electric);}
+  .navlinks{display:flex; gap:36px; font-size:14px; font-weight:500;}
+  .navlinks a{text-decoration:none; color:rgba(255,255,255,.82); transition:color .2s;}
+  header.scrolled .navlinks a{color:var(--graphite);}
+  .navlinks a:hover{color:var(--electric);}
+  .navlinks a:focus-visible{outline:2px solid var(--electric); outline-offset:4px;}
+  .nav-desktop-cta{display:inline-flex;}
+
+  .menu-toggle{display:none; flex:none; width:38px; height:38px; border:1.5px solid rgba(255,255,255,.5); border-radius:3px; background:transparent; cursor:pointer; align-items:center; justify-content:center;}
+  header.scrolled .menu-toggle{border-color:var(--line);}
+  .menu-toggle span{display:block; width:16px; height:1.5px; background:#fff; position:relative; transition:background .2s;}
+  .menu-toggle span::before, .menu-toggle span::after{content:""; position:absolute; left:0; width:16px; height:1.5px; background:#fff; transition:transform .2s ease, top .2s ease, opacity .2s ease;}
+  .menu-toggle span::before{top:-5px;}
+  .menu-toggle span::after{top:5px;}
+  header.scrolled .menu-toggle span, header.scrolled .menu-toggle span::before, header.scrolled .menu-toggle span::after{background:var(--graphite);}
+  .menu-toggle:focus-visible{outline:2px solid var(--electric); outline-offset:2px;}
+  .menu-toggle[aria-expanded="true"] span{background:transparent;}
+  .menu-toggle[aria-expanded="true"] span::before{top:0; transform:rotate(45deg);}
+  .menu-toggle[aria-expanded="true"] span::after{top:0; transform:rotate(-45deg);}
+
+  .mobile-nav{position:fixed; top:0; left:0; right:0; bottom:0; z-index:49; background:var(--navy-deep); padding:96px 32px 40px; opacity:0; pointer-events:none; transition:opacity .25s ease; overflow-y:auto;}
+  .mobile-nav.open{opacity:1; pointer-events:auto;}
+  .mobile-nav a{display:block; font-family:'Archivo',sans-serif; font-weight:700; font-size:26px; color:#fff; text-decoration:none; padding:14px 0; border-bottom:1px solid rgba(255,255,255,.1);}
+  .mobile-nav .btn{margin-top:32px; width:100%; justify-content:center;}
+
+  .btn{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:12.5px; letter-spacing:.06em; text-transform:uppercase; padding:14px 24px; border-radius:3px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:1.5px solid var(--tech-blue); transition:background .2s,color .2s;}
+  .btn-fill{background:var(--tech-blue); color:#fff;}
+  .btn-fill:hover{background:var(--electric); border-color:var(--electric);}
+  .btn-line{background:transparent; color:#fff; border-color:rgba(255,255,255,.5);}
+  .btn-line:hover{background:#fff; color:var(--navy-deep); border-color:#fff;}
+  header.scrolled .btn-line{color:var(--graphite); border-color:var(--graphite);}
+  header.scrolled .btn-line:hover{background:var(--graphite); color:#fff;}
+  .btn:focus-visible{outline:2px solid var(--electric); outline-offset:2px;}
+
+  /* hero */
+  .hero{position:relative; background:var(--navy-deep); overflow:hidden; padding:0;}
+  .hero-art{position:absolute; inset:0;}
+  .hero-overlay{position:absolute; inset:0; background:linear-gradient(100deg, rgba(7,21,37,.94) 0%, rgba(7,21,37,.75) 42%, rgba(7,21,37,.35) 100%);}
+  .hero-inner{position:relative; padding:190px 0 120px; max-width:min(680px, calc(100vw - 460px));}
+  .hero .label{color:var(--electric); margin-bottom:22px; display:block;}
+  .hero h1{font-size:clamp(38px,5.6vw,72px); line-height:1.06; color:#fff;}
+  .hero p.lead{margin-top:24px; font-size:17.5px; line-height:1.65; color:#B9C7D8; max-width:52ch;}
+  .hero-cta{margin-top:38px; display:flex; gap:14px; flex-wrap:wrap;}
+  .hero-tags{position:absolute; right:40px; top:170px; display:flex; flex-direction:column; gap:10px; text-align:right; z-index:3;}
+  .hero-tags span{font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.12em; color:rgba(255,255,255,.45);}
+  .hero-tags span b{color:var(--electric); font-weight:500;}
+  .coord{position:absolute; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:rgba(255,255,255,.35); letter-spacing:.05em; z-index:3;}
+  .hero-person-shadow{position:absolute; right:6%; bottom:6%; width:26%; max-width:320px; height:34px; background:radial-gradient(ellipse, rgba(0,0,0,.45), transparent 70%); z-index:1;}
+  .hero-person{position:absolute; right:7%; bottom:0; height:clamp(380px,44vw,560px); width:auto; z-index:2; filter:drop-shadow(0 18px 26px rgba(0,0,0,.35));}
+
+  /* manifesto */
+  .manifesto{background:var(--navy-dark); color:#fff; position:relative; overflow:hidden;}
+  .manifesto-grid{position:absolute; inset:0; opacity:.5;}
+  .manifesto .wrap{position:relative; max-width:980px;}
+  .manifesto .label{color:var(--electric); margin-bottom:26px;}
+  .manifesto h2{font-size:clamp(26px,3.6vw,44px); line-height:1.35; font-weight:700;}
+  .manifesto h2 em{font-style:normal; color:var(--electric);}
+
+  /* services — editorial list */
+  .svc-head{display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:20px; border-bottom:1px solid var(--line); padding-bottom:26px;}
+  .svc-head .label{color:var(--tech-blue);}
+  .svc-head h2{font-size:clamp(28px,3.4vw,40px); margin-top:10px;}
+  .svc-row{display:grid; grid-template-columns:90px 1fr 340px; align-items:center; gap:32px; padding:34px 0; border-bottom:1px solid var(--line); transition:background .3s ease;}
+  .svc-row:hover{background:var(--lbg);}
+  .svc-num{font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--muted);}
+  .svc-row:hover .svc-num{color:var(--tech-blue);}
+  .svc-title h3{font-size:24px; font-weight:600; transition:color .3s;}
+  .svc-row:hover .svc-title h3{color:var(--tech-blue);}
+  .svc-title p{margin:8px 0 0; font-size:14.5px; color:var(--muted); max-width:52ch;}
+  .svc-diagram{opacity:0; transform:translateX(10px); transition:opacity .35s ease, transform .35s ease; justify-self:end;}
+  .svc-row:hover .svc-diagram{opacity:1; transform:translateX(0);}
+
+  /* about */
+  .about{background:var(--lbg);}
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;}
+  .about-art{aspect-ratio:4/5; border-radius:2px; overflow:hidden; background:var(--navy-deep); position:relative;}
+  .about .label{color:var(--tech-blue); margin-bottom:18px; display:block;}
+  .about h2{font-size:clamp(26px,3.2vw,36px);}
+  .about p.body{margin-top:20px; font-size:15.5px; line-height:1.7; color:var(--muted); max-width:52ch;}
+  .stat-row{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-top:40px;}
+  .stat{background:var(--lbg); padding:22px 20px;}
+  .stat .v{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:22px; color:var(--tech-blue); font-variant-numeric:tabular-nums;}
+  .stat .l{margin-top:6px; font-size:12px; color:var(--muted); letter-spacing:.02em;}
+
+  /* process — engineering timeline */
+  .process-head{margin-bottom:64px;}
+  .process-head .label{color:var(--tech-blue);}
+  .process-head h2{font-size:clamp(28px,3.4vw,40px); margin-top:10px;}
+  .timeline{position:relative; display:grid; grid-template-columns:repeat(7,1fr); gap:0;}
+  .timeline::before{content:""; position:absolute; top:13px; left:0; right:0; height:1px; background:var(--line);}
+  .t-node{position:relative; padding-right:14px;}
+  .t-dot{width:9px; height:9px; border-radius:50%; background:var(--white); border:2px solid var(--tech-blue); position:relative; z-index:1;}
+  .t-node .num{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:16px;}
+  .t-node h3{font-size:14.5px; font-weight:600; margin-top:6px; line-height:1.35;}
+
+  /* projects — asymmetric */
+  .projects{background:var(--white);}
+  .proj-head{margin-bottom:56px;}
+  .proj-head .label{color:var(--tech-blue);}
+  .proj-head h2{font-size:clamp(28px,3.4vw,40px); margin-top:10px;}
+  .proj{display:grid; gap:2px; margin-bottom:2px;}
+  .proj.big{grid-template-columns:1.6fr 1fr;}
+  .proj.small{grid-template-columns:1fr 1.6fr;}
+  .proj-visual{aspect-ratio:16/10; background:var(--navy-deep); overflow:hidden; position:relative;}
+  .proj-visual svg{width:100%; height:100%; transition:transform .5s ease;}
+  .proj-visual:hover svg{transform:scale(1.045);}
+  .proj-info{display:flex; flex-direction:column; justify-content:center; padding:36px;}
+  .proj-info .pnum{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--tech-blue); letter-spacing:.08em;}
+  .proj-info h3{font-size:22px; margin:12px 0 10px; font-weight:600;}
+  .proj-info p{margin:0; font-size:14px; color:var(--muted); line-height:1.6;}
+  .proj-tags{margin-top:16px; display:flex; gap:8px; flex-wrap:wrap;}
+  .proj-tags span{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); padding:4px 8px; border-radius:2px;}
+
+  /* robotics */
+  .robotics{background:var(--navy-deep); color:#fff; position:relative; overflow:hidden;}
+  .robotics-art{position:absolute; inset:0; opacity:.9;}
+  .robotics-photo-wrap{display:flex; align-items:flex-end; justify-content:center; height:100%;}
+  .robotics-photo{max-width:100%; max-height:440px; width:auto; height:auto; filter:drop-shadow(0 20px 30px rgba(0,0,0,.4));}
+  .robotics .wrap{position:relative; display:grid; grid-template-columns:1fr 0.6fr 1.1fr; gap:32px; align-items:end;}
+  .robotics .label{color:var(--electric); margin-bottom:22px; display:block;}
+  .robotics h2{font-size:clamp(34px,5vw,58px); line-height:1.05;}
+  .robotics p.body{margin-top:20px; color:#AEBED2; font-size:15.5px; line-height:1.65; max-width:44ch;}
+  .params{display:flex; flex-direction:column; gap:14px; border-left:1px solid var(--line-on-dark); padding-left:24px;}
+  .params .p-row{display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:#8FA3BE;}
+  .params .p-row b{color:#fff; font-weight:500;}
+
+  /* software dashboard */
+  .software{background:var(--lbg);}
+  .sw-grid{display:grid; grid-template-columns:1fr 1.15fr; gap:56px; align-items:center;}
+  .software .label{color:var(--tech-blue); margin-bottom:18px; display:block;}
+  .software h2{font-size:clamp(26px,3.2vw,36px);}
+  .software p.body{margin-top:18px; font-size:15px; line-height:1.65; color:var(--muted); max-width:46ch;}
+  .dash{background:var(--navy-dark); border-radius:4px; padding:22px; color:#fff;}
+  .dash-top{display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8FA3BE; margin-bottom:16px;}
+  .dash-status{display:flex; align-items:center; gap:6px;}
+  .dash-status .d{width:6px; height:6px; border-radius:50%; background:#2FBE6E; box-shadow:0 0 0 0 rgba(47,190,110,.6); animation:dash-pulse 2s infinite;}
+  @keyframes dash-pulse{
+    0%{box-shadow:0 0 0 0 rgba(47,190,110,.55);}
+    70%{box-shadow:0 0 0 6px rgba(47,190,110,0);}
+    100%{box-shadow:0 0 0 0 rgba(47,190,110,0);}
+  }
+  .dash-tabs{display:flex; gap:8px; margin-bottom:14px;}
+  .dash-tab{font-family:'IBM Plex Mono',monospace; font-size:10.5px; padding:5px 12px; border-radius:20px; border:1px solid var(--line-on-dark); color:#8FA3BE;}
+  .dash-tab.active{background:var(--tech-blue); color:#fff; border-color:var(--tech-blue);}
+  .dash-grid{display:grid; grid-template-columns:1.45fr 1fr; gap:12px;}
+  .dash-chart{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line-on-dark); border-radius:4px; padding:12px 10px 8px; position:relative; overflow:hidden; display:flex; align-items:center;}
+  .dash-chart::before{content:""; position:absolute; left:52%; top:-40%; width:80%; height:130%; transform:translateX(-50%); background:radial-gradient(ellipse at center, rgba(22,168,255,.16), transparent 68%); pointer-events:none;}
+  .dash-chart svg{position:relative; display:block; width:100%; height:auto;}
+  .dash-side{display:flex; flex-direction:column; gap:12px;}
+  .dash-metric{background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border:1px solid var(--line-on-dark); border-radius:4px; padding:13px 14px; display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .dash-metric .mv{font-family:'IBM Plex Mono',monospace; font-size:21px; color:#fff; font-weight:600; font-variant-numeric:tabular-nums; display:flex; align-items:baseline; gap:7px; line-height:1;}
+  .dash-metric .mv .trend{font-size:10.5px; font-weight:500; letter-spacing:.02em;}
+  .dash-metric .mv .trend.up{color:#3ED28A;}
+  .dash-metric .mv .trend.down{color:#3ED28A;}
+  .dash-metric .ml{font-size:10.5px; color:#7F94AC; margin-top:7px; letter-spacing:.02em;}
+  .dash-metric .spark{display:block; flex:none; opacity:.9;}
+  .dash-gauge{position:relative; width:54px; height:54px; flex:none;}
+  .dash-gauge svg{transform:rotate(-90deg); display:block;}
+  .dash-gauge .gv{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:12px; color:#fff; font-weight:600; font-variant-numeric:tabular-nums;}
+  .dash-list{margin-top:12px; border-top:1px solid var(--line-on-dark); padding-top:12px; display:flex; flex-direction:column; gap:11px;}
+  .dash-list .lh{display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:9px; color:#5C7A96; letter-spacing:.1em; text-transform:uppercase;}
+  .dash-list .r{display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#C3D2E2;}
+  .dash-list .r .name{display:flex; align-items:center; gap:9px;}
+  .dash-list .r .dot{width:5px; height:5px; border-radius:50%; background:#3ED28A; flex:none; box-shadow:0 0 6px rgba(62,210,138,.7);}
+  .dash-list .r .right{display:flex; align-items:center; gap:12px;}
+  .dash-list .r .track{width:52px; height:3px; border-radius:2px; background:rgba(255,255,255,.09); overflow:hidden;}
+  .dash-list .r .track i{display:block; height:100%; background:linear-gradient(90deg,var(--tech-blue),var(--electric)); border-radius:2px;}
+  .dash-list .r .pct{color:#93A9C0; font-size:11px; font-variant-numeric:tabular-nums; min-width:30px; text-align:right;}
+  .dash-list .r em{font-style:normal; color:#3ED28A; background:rgba(62,210,138,.1); border:1px solid rgba(62,210,138,.22); padding:2px 9px; border-radius:20px; font-size:9.5px; letter-spacing:.04em;}
+
+  /* news */
+  .news-head{display:flex; justify-content:space-between; align-items:end; gap:24px; margin-bottom:48px; border-bottom:1px solid var(--line); padding-bottom:22px;}
+  .news-head .label{color:var(--tech-blue);}
+  .news-head h2{font-size:clamp(26px,3.2vw,36px); margin-top:10px;}
+  .news-badge{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; background:var(--tech-blue); color:#fff; padding:4px 9px; border-radius:2px; margin-left:10px;}
+  .news-nav{display:flex; gap:8px;}
+  .news-arrow{width:38px; height:38px; border:1px solid var(--line); border-radius:3px; background:transparent; color:var(--graphite); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .2s, color .2s, border-color .2s, opacity .2s;}
+  .news-arrow:hover:not(:disabled){background:var(--graphite); border-color:var(--graphite); color:#fff;}
+  .news-arrow:disabled{opacity:.3; cursor:default;}
+  .news-arrow:focus-visible{outline:2px solid var(--tech-blue); outline-offset:2px;}
+  .news{display:flex; gap:1px; background:var(--line); border:1px solid var(--line); overflow-x:auto; scroll-behavior:smooth; scrollbar-width:none; -ms-overflow-style:none;}
+  .news::-webkit-scrollbar{display:none;}
+  .news-post{flex:0 0 316px; background:var(--white); padding:28px; display:flex; flex-direction:column;}
+  .news-date{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--tech-blue);}
+  .news-post h3{font-size:17px; margin:12px 0 8px; font-weight:600; line-height:1.35;}
+  .news-post p{font-size:13.5px; color:var(--muted); line-height:1.55; margin:0; flex:1;}
+  .news-post .rm{margin-top:16px; font-size:12.5px; color:var(--tech-blue); font-weight:600; font-family:'IBM Plex Mono',monospace;}
+  .news-bar{margin-top:22px; height:3px; background:var(--line); border-radius:2px; position:relative; cursor:pointer;}
+  .news-bar-thumb{position:absolute; top:-3px; height:9px; border-radius:5px; background:var(--tech-blue); min-width:36px; cursor:grab; transition:background .2s;}
+  .news-bar-thumb:hover{background:var(--electric);}
+  .news-bar.dragging .news-bar-thumb{cursor:grabbing; background:var(--electric);}
+
+  /* comms */
+  .comm-wrap{background:var(--navy-dark); color:#fff; border-radius:4px; padding:48px; display:grid; grid-template-columns:1fr 340px; gap:44px; align-items:center;}
+  .comm-wrap .label{color:var(--electric); margin-bottom:16px; display:block;}
+  .comm-wrap h3{font-size:24px; margin-bottom:12px; font-weight:600;}
+  .comm-wrap p{color:#AEBED2; font-size:14.5px; line-height:1.6; max-width:44ch; margin:0;}
+  .chat-mock{background:rgba(255,255,255,.05); border:1px solid var(--line-on-dark); border-radius:4px; padding:16px;}
+  .chat-line{display:flex; margin-bottom:10px;}
+  .chat-line.me{justify-content:flex-end;}
+  .bubble{max-width:78%; padding:9px 13px; border-radius:3px; font-size:13px; line-height:1.4;}
+  .bubble.them{background:rgba(255,255,255,.06); border:1px solid var(--line-on-dark);}
+  .bubble.me{background:var(--tech-blue); color:#fff;}
+  .chat-status{font-family:'IBM Plex Mono',monospace; font-size:11px; color:#8FA3BE; text-align:center; margin-top:8px;}
+
+  /* team */
+  .team{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .member{background:var(--white); padding:26px;}
+  .m-photo{aspect-ratio:1; background:var(--navy-deep); margin-bottom:16px; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:24px; color:var(--electric); position:relative; overflow:hidden;}
+  .member h3{font-size:15.5px; font-weight:600;}
+  .member .role{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--tech-blue); margin-top:5px; letter-spacing:.03em;}
+  .member p.desc{font-size:12.5px; color:var(--muted); margin-top:8px; line-height:1.5;}
+
+  /* contact */
+  .contact{background:var(--lbg);}
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  .field{margin-bottom:20px;}
+  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .field input, .field textarea{width:100%; background:var(--white); border:1px solid var(--line); border-radius:3px; padding:13px 14px; font-family:'IBM Plex Sans',sans-serif; font-size:14.5px; color:var(--graphite);}
+  .field input:focus, .field textarea:focus{outline:2px solid var(--tech-blue); outline-offset:1px;}
+  .consent-label{display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12.5px; line-height:1.5; color:var(--muted);}
+  .consent-label input{width:16px; height:16px; margin:2px 0 0; flex:none; accent-color:var(--tech-blue);}
+  .consent-label a{color:var(--tech-blue);}
+  .req dt{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-top:18px; text-transform:uppercase; letter-spacing:.05em;}
+  .req dd{margin:4px 0 0; font-size:16px;}
+
+  footer{background:var(--navy-deep); color:#fff; padding:36px 0;}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
+  .legal{font-family:'IBM Plex Mono',monospace; font-size:11px; color:#7C8FA6; line-height:1.6;}
+
+  @media (max-width:1024px){
+    .about-grid, .sw-grid, .contact-grid{grid-template-columns:1fr;}
+    .robotics .wrap{grid-template-columns:1fr;}
+    .params{border-left:none; padding-left:0; border-top:1px solid var(--line-on-dark); padding-top:20px; flex-direction:row; flex-wrap:wrap; gap:20px;}
+    .timeline{grid-template-columns:repeat(4,1fr); row-gap:36px;}
+    .timeline::before{display:none;}
+    .team{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:900px){
+    .navlinks, .nav-desktop-cta{display:none;}
+    .menu-toggle{display:flex;}
+  }
+  @media (max-width:760px){
+    .wrap{padding:0 22px;}
+    section{padding:80px 0;}
+    .svc-row{grid-template-columns:1fr; gap:12px;}
+    .svc-diagram{display:none;}
+    .proj.big, .proj.small{grid-template-columns:1fr;}
+    .timeline{grid-template-columns:repeat(2,1fr);}
+    .team, .stat-row{grid-template-columns:1fr;}
+    .news-post{flex:0 0 78vw;}
+    .comm-wrap{grid-template-columns:1fr; padding:28px;}
+    .hero-tags{display:none;}
+    .hero-person, .hero-person-shadow{display:none;}
+    .hero-inner{max-width:100%;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap navrow">
+    <div class="brand">SMI <span>/</span> SMART MODULE INTERNATIONAL</div>
+    <nav class="navlinks">
+      <a href="#services">Услуги</a>
+      <a href="#process">Решения</a>
+      <a href="#about">О компании</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <a href="#contact" class="btn btn-line nav-desktop-cta">Обсудить проект →</a>
+    <button class="menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobileNav" aria-hidden="true">
+  <a href="#services">Услуги</a>
+  <a href="#process">Решения</a>
+  <a href="#about">О компании</a>
+  <a href="#contact">Контакты</a>
+  <a href="#contact" class="btn btn-fill">Обсудить проект →</a>
+</nav>
+
+<section class="hero">
+  <svg class="hero-art" viewBox="0 0 1440 820" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="hg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40"/></filter>
+      <linearGradient id="armGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#16A8FF"/><stop offset="100%" stop-color="#0878D1"/>
+      </linearGradient>
+    </defs>
+    <rect width="1440" height="820" fill="#071525"/>
+    <g stroke="#16324E" stroke-width="1" opacity="0.7">
+      <line x1="0" y1="140" x2="1440" y2="140"/>
+      <line x1="0" y1="500" x2="1440" y2="500"/>
+      <line x1="1040" y1="0" x2="1040" y2="820"/>
+    </g>
+    <ellipse cx="1080" cy="380" rx="360" ry="340" fill="#0B3A5C" opacity="0.45" filter="url(#hg)"/>
+    <g fill="#16A8FF" opacity="0.8">
+      <circle cx="1040" cy="140" r="3"/>
+      <circle cx="1040" cy="500" r="3"/>
+    </g>
+  </svg>
+  <div class="hero-overlay"></div>
+  <div class="hero-person-shadow"></div>
+  <img class="hero-person" src="assets/hero-engineer.png" alt="">
+  <span class="coord" style="top:150px; left:40px;">X: 40.221 &nbsp; Y: 118.004</span>
+  <span class="coord" style="bottom:20px; left:40px;">SMI-2026 // ENGINEERING SYSTEM</span>
+  <div class="wrap hero-inner">
+    <span class="label">Диагностика бизнеса · Софт · Автоматизация · Люди</span>
+    <h1>Входим в бизнес под NDA — решаем то, что мешает ему расти</h1>
+    <p class="lead">Находим, что тормозит производство, и внедряем нужное решение: программное обеспечение, автоматизацию процессов или работу с руководителями и командой.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-fill">Обсудить проект →</a>
+      <a href="#process" class="btn btn-line">Как мы работаем</a>
+    </div>
+  </div>
+  <div class="hero-tags">
+    <span><b>01</b> DIAGNOSTICS</span>
+    <span><b>02</b> SOFTWARE</span>
+    <span><b>03</b> AUTOMATION</span>
+    <span><b>04</b> PEOPLE</span>
+  </div>
+</section>
+
+<section class="manifesto">
+  <svg class="manifesto-grid" viewBox="0 0 1200 400" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <g stroke="#16324E" stroke-width="1">
+      <line x1="0" y1="0" x2="0" y2="400"/><line x1="300" y1="0" x2="300" y2="400"/>
+      <line x1="600" y1="0" x2="600" y2="400"/><line x1="900" y1="0" x2="900" y2="400"/><line x1="1200" y1="0" x2="1200" y2="400"/>
+      <line x1="0" y1="0" x2="1200" y2="0"/><line x1="0" y1="200" x2="1200" y2="200"/><line x1="0" y1="400" x2="1200" y2="400"/>
+    </g>
+  </svg>
+  <div class="wrap">
+    <span class="label">Подход</span>
+    <h2>Мы не продаём готовое решение заранее. <em>Сначала входим в бизнес под NDA и находим, что реально мешает расти</em> — и только потом решаем это тем, что нужно: софтом, процессом или людьми.</h2>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="svc-head">
+      <div><span class="label">Что мы делаем</span><h2>Услуги</h2></div>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">01</div>
+      <div class="svc-title"><h3>Диагностика бизнеса</h3><p>Входим в процессы под NDA и находим, что реально тормозит рост — как независимый ревизор, а не с готовым ответом заранее.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><rect x="10" y="10" width="60" height="50"/><rect x="100" y="10" width="60" height="50"/><rect x="190" y="10" width="60" height="50"/><line x1="70" y1="35" x2="100" y2="35"/><line x1="160" y1="35" x2="190" y2="35"/></g><circle cx="40" cy="35" r="3" fill="#16A8FF"/></svg>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">02</div>
+      <div class="svc-title"><h3>Разработка ПО</h3><p>Пишем программное обеспечение под конкретную задачу — от учёта процессов до управления линией.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><rect x="10" y="10" width="240" height="50" rx="2"/><path d="M25 45 L55 25 L85 40 L115 15 L145 35 L175 20 L205 42 L235 28" stroke="#16A8FF"/></g></svg>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">03</div>
+      <div class="svc-title"><h3>Автоматизация процессов</h3><p>Настраиваем автоматизацию и диспетчеризацию там, где она даст измеримый результат — не больше и не меньше.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><path d="M10 55 L60 55 L60 15 L110 15"/><path d="M110 15 L160 15 L160 55 L250 55"/></g><circle cx="160" cy="15" r="4" fill="#16A8FF"/></svg>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">04</div>
+      <div class="svc-title"><h3>Работа с руководителями и командой</h3><p>Личностный тренинг и консультации: возвращаем людям роли в компании и уверенность в решениях.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><circle cx="60" cy="35" r="22"/><circle cx="150" cy="35" r="22"/><line x1="82" y1="35" x2="128" y2="35"/></g><circle cx="60" cy="35" r="3" fill="#16A8FF"/><circle cx="150" cy="35" r="3" fill="#16A8FF"/></svg>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">05</div>
+      <div class="svc-title"><h3>Разработка уникальных продуктов</h3><p>Создаём инновационные решения без аналогов на рынке под задачи заказчика.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><polygon points="130,10 230,35 130,60 30,35"/></g><circle cx="130" cy="35" r="4" fill="#16A8FF"/></svg>
+    </div>
+    <div class="svc-row">
+      <div class="svc-num">06</div>
+      <div class="svc-title"><h3>Сопровождение внедрения</h3><p>Контролируем результат после запуска и остаёмся на связи — MVP не заканчивается на сдаче.</p></div>
+      <svg class="svc-diagram" width="260" height="70" viewBox="0 0 260 70"><g stroke="#0878D1" stroke-width="1.5" fill="none"><rect x="15" y="15" width="230" height="40" rx="2"/><line x1="15" y1="35" x2="245" y2="35"/></g><circle cx="45" cy="25" r="3" fill="#16A8FF"/><circle cx="75" cy="25" r="3" fill="#16A8FF"/><circle cx="105" cy="25" r="3" fill="#16A8FF"/></svg>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about">
+  <div class="wrap about-grid">
+    <div class="about-art">
+      <img src="assets/about-panel.jpg" alt="" style="width:100%; height:100%; object-fit:cover; display:block;">
+    </div>
+    <div>
+      <span class="label">О компании</span>
+      <h2>Команда, которая входит в бизнес под NDA и решает то, что найдёт</h2>
+      <p class="body">Не продаём заранее готовое решение. Сначала диагностируем процессы с полным погружением, а затем внедряем то, что нужно именно этому бизнесу — программное обеспечение, автоматизацию или работу с руководителями и командой.</p>
+      <div class="stat-row">
+        <div class="stat"><div class="v" data-count="2026" data-suffix="">0</div><div class="l">год регистрации (ОГРН)</div></div>
+        <div class="stat"><div class="v" data-count="100" data-suffix="%">0</div><div class="l">проектов под NDA</div></div>
+        <div class="stat"><div class="v" data-count="7" data-suffix="">0</div><div class="l">этапов полного цикла</div></div>
+        <div class="stat" style="display:flex; flex-direction:column; justify-content:center;"><div class="mono" style="font-size:13px; color:var(--tech-blue); font-weight:600;">MVP → ВНЕДРЕНИЕ</div><div class="l" style="margin-top:6px;">полный цикл сопровождения</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="process-head">
+      <span class="label">Методология</span>
+      <h2>Как мы работаем</h2>
+    </div>
+    <div class="timeline">
+      <div class="t-node"><div class="t-dot"></div><div class="num">01</div><h3>Анализ</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">02</div><h3>Погружение в производство</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">03</div><h3>Поиск точек оптимизации</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">04</div><h3>Проектирование решений</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">05</div><h3>Разработка</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">06</div><h3>Внедрение</h3></div>
+      <div class="t-node"><div class="t-dot"></div><div class="num">07</div><h3>Сопровождение</h3></div>
+    </div>
+  </div>
+</section>
+
+<!-- ВРЕМЕННО СКРЫТО (отложено) — раздел "Проекты"
+<section id="projects" class="projects">
+  <div class="wrap">
+    <div class="proj-head">
+      <span class="label">Портфолио</span>
+      <h2>Проекты</h2>
+    </div>
+    <div class="proj big">
+      <div class="proj-visual"><svg viewBox="0 0 500 310" xmlns="http://www.w3.org/2000/svg"><rect width="500" height="310" fill="#071525"/><g stroke="#16324E"><line x1="0" y1="80" x2="500" y2="80"/><line x1="0" y1="230" x2="500" y2="230"/></g><g stroke="#0878D1" stroke-width="2" fill="none"><rect x="60" y="110" width="90" height="90"/><rect x="205" y="110" width="90" height="90"/><rect x="350" y="110" width="90" height="90"/><line x1="150" y1="155" x2="205" y2="155"/><line x1="295" y1="155" x2="350" y2="155"/></g><circle cx="105" cy="155" r="4" fill="#16A8FF"/><circle cx="250" cy="155" r="4" fill="#16A8FF"/><circle cx="395" cy="155" r="4" fill="#16A8FF"/></svg></div>
+      <div class="proj-info">
+        <div class="pnum">Проект 01</div>
+        <h3>ПО для управления производственной линией</h3>
+        <p>Интегрированная система для оптимизации оборудования и повышения производительности.</p>
+        <div class="proj-tags"><span>Software</span><span>Automation</span></div>
+      </div>
+    </div>
+    <div class="proj small">
+      <div class="proj-info">
+        <div class="pnum">Проект 02</div>
+        <h3>Автоматизация процессов</h3>
+        <p>Выявление слабых участков и решения, сократившие затраты и повысившие эффективность.</p>
+        <div class="proj-tags"><span>Analysis</span><span>Automation</span></div>
+      </div>
+      <div class="proj-visual"><svg viewBox="0 0 500 310" xmlns="http://www.w3.org/2000/svg"><rect width="500" height="310" fill="#071525"/><g stroke="#0878D1" stroke-width="2" fill="none"><path d="M40 250 L140 250 L140 150 L260 150 L260 80 L460 80"/></g><circle cx="140" cy="150" r="5" fill="#16A8FF"/><circle cx="260" cy="80" r="5" fill="#16A8FF"/></svg></div>
+    </div>
+    <div class="proj big">
+      <div class="proj-visual"><svg viewBox="0 0 500 310" xmlns="http://www.w3.org/2000/svg"><rect width="500" height="310" fill="#071525"/><g stroke="#0878D1" stroke-width="2" fill="none"><polygon points="250,60 400,155 250,250 100,155"/><line x1="250" y1="60" x2="250" y2="250"/><line x1="100" y1="155" x2="400" y2="155"/></g><circle cx="250" cy="155" r="5" fill="#16A8FF"/></svg></div>
+      <div class="proj-info">
+        <div class="pnum">Проект 03</div>
+        <h3>Уникальный продукт для отрасли</h3>
+        <p>Инновационное решение, не имеющее аналогов на рынке, под задачи заказчика.</p>
+        <div class="proj-tags"><span>R&D</span><span>Engineering</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<section class="robotics">
+  <svg class="robotics-art" viewBox="0 0 1440 700" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs><filter id="rg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter></defs>
+    <ellipse cx="1150" cy="250" rx="380" ry="360" fill="#0B3A5C" opacity="0.5" filter="url(#rg)"/>
+  </svg>
+  <div class="wrap">
+    <div>
+      <span class="label">Автоматизация</span>
+      <h2>Автоматизация без лишней сложности</h2>
+      <p class="body">Подбираем и внедряем решения для конкретной задачи производства — без избыточной автоматизации там, где она не нужна.</p>
+    </div>
+    <div class="params">
+      <div class="p-row"><span>Automation</span><b>PLC / SCADA</b></div>
+      <div class="p-row"><span>Monitoring</span><b>Real-time Data</b></div>
+      <div class="p-row"><span>Quality</span><b>Process Control</b></div>
+      <div class="p-row"><span>Integration</span><b>Full Line</b></div>
+      <div class="p-row"><span>Diagnostics</span><b>Downtime Analysis</b></div>
+    </div>
+    <div class="robotics-photo-wrap"><img class="robotics-photo" src="assets/automation-cabinet.jpg" alt="Промышленный шкаф автоматизации"></div>
+  </div>
+</section>
+
+<section class="software">
+  <div class="wrap sw-grid">
+    <div>
+      <span class="label">Промышленное ПО</span>
+      <h2>Контроль производства в реальном времени</h2>
+      <p class="body">Разрабатываем ПО для мониторинга линий: показатели загрузки, простоев и качества — в одном интерфейсе для руководителя и инженера.</p>
+    </div>
+    <div class="dash">
+      <div class="dash-top"><span>PRODUCTION MONITOR</span><span class="dash-status"><span class="d"></span>LIVE</span></div>
+      <div class="dash-tabs">
+        <span class="dash-tab active">Линия A</span>
+        <span class="dash-tab">Линия B</span>
+        <span class="dash-tab">Узел ОТК</span>
+      </div>
+      <div class="dash-grid">
+        <div class="dash-chart">
+          <svg viewBox="0 0 420 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Загрузка линии по часам, с 08:00 до 15:00">
+            <defs>
+              <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4FB4FF"/>
+                <stop offset="55%" stop-color="#1D6FB8" stop-opacity=".72"/>
+                <stop offset="100%" stop-color="#0A4A85" stop-opacity=".38"/>
+              </linearGradient>
+              <linearGradient id="barGradNow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#A5EDFF"/>
+                <stop offset="55%" stop-color="#2E96DE" stop-opacity=".85"/>
+                <stop offset="100%" stop-color="#1174C4" stop-opacity=".45"/>
+              </linearGradient>
+              <filter id="lineGlow" x="-20%" y="-45%" width="140%" height="190%">
+                <feGaussianBlur stdDeviation="3" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <g font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#7F98B2" letter-spacing=".5">
+              <rect x="28" y="9" width="7" height="7" rx="1.5" fill="#4FB4FF"/>
+              <text x="40" y="15.5">ТЕКУЩАЯ СМЕНА</text>
+              <line x1="132" y1="12.5" x2="146" y2="12.5" stroke="#C8E1F5" stroke-width="1.4" stroke-linecap="round"/>
+              <text x="151" y="15.5">ПРЕДЫДУЩАЯ</text>
+            </g>
+
+            <rect x="369" y="26" width="38" height="192" rx="3" fill="rgba(255,255,255,.05)"/>
+
+            <g stroke="rgba(255,255,255,.07)" stroke-width="1">
+              <line x1="28" y1="26" x2="412" y2="26"/>
+              <line x1="28" y1="74" x2="412" y2="74"/>
+              <line x1="28" y1="122" x2="412" y2="122"/>
+              <line x1="28" y1="170" x2="412" y2="170"/>
+            </g>
+            <line x1="28" y1="218" x2="412" y2="218" stroke="rgba(255,255,255,.18)" stroke-width="1"/>
+
+            <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#5C7A96" text-anchor="end">
+              <text x="21" y="29">100</text>
+              <text x="21" y="77">75</text>
+              <text x="21" y="125">50</text>
+              <text x="21" y="173">25</text>
+              <text x="21" y="221">0</text>
+            </g>
+
+            <line x1="28" y1="54.8" x2="412" y2="54.8" stroke="rgba(255,255,255,.3)" stroke-width="1" stroke-dasharray="3 4"/>
+            <text x="30" y="50" font-family="IBM Plex Mono, monospace" font-size="7.5" fill="#8FA8C0" letter-spacing="1">ПЛАН 85%</text>
+
+            <g>
+              <rect x="39"  y="81.7"  width="26" height="136.3" rx="3" fill="url(#barGrad)"/>
+              <rect x="87"  y="68.2"  width="26" height="149.8" rx="3" fill="url(#barGrad)"/>
+              <rect x="135" y="118.2" width="26" height="99.8"  rx="3" fill="url(#barGrad)"/>
+              <rect x="183" y="133.5" width="26" height="84.5"  rx="3" fill="url(#barGrad)"/>
+              <rect x="231" y="85.5"  width="26" height="132.5" rx="3" fill="url(#barGrad)"/>
+              <rect x="279" y="60.6"  width="26" height="157.4" rx="3" fill="url(#barGrad)"/>
+              <rect x="327" y="49.1"  width="26" height="168.9" rx="3" fill="url(#barGrad)"/>
+              <rect x="375" y="39.4"  width="26" height="178.6" rx="3" fill="url(#barGradNow)"/>
+            </g>
+
+            <path class="draw" d="M52 95.1 C76 95.1 76 83.6 100 83.6 C124 83.6 124 99 148 99 C172 99 172 106.6 196 106.6 C220 106.6 220 91.3 244 91.3 C268 91.3 268 81.7 292 81.7 C316 81.7 316 72.1 340 72.1 C364 72.1 364 64.4 388 64.4" fill="none" stroke="#C8E1F5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".85" filter="url(#lineGlow)"/>
+            <circle cx="388" cy="64.4" r="2.6" fill="#C8E1F5"/>
+
+            <circle cx="388" cy="39.4" r="6.5" fill="none" stroke="rgba(207,245,255,.32)" stroke-width="1"/>
+            <circle cx="388" cy="39.4" r="3.2" fill="#EAFBFF"/>
+            <text x="388" y="22" font-family="IBM Plex Mono, monospace" font-size="10" font-weight="600" fill="#CFF5FF" text-anchor="middle">93%</text>
+
+            <g font-family="IBM Plex Mono, monospace" font-size="8" fill="#5C7A96" text-anchor="middle">
+              <text x="52" y="236">08</text>
+              <text x="100" y="236">09</text>
+              <text x="148" y="236">10</text>
+              <text x="196" y="236">11</text>
+              <text x="244" y="236">12</text>
+              <text x="292" y="236">13</text>
+              <text x="340" y="236">14</text>
+              <text x="388" y="236" fill="#9FD8F5">15</text>
+            </g>
+          </svg>
+        </div>
+        <div class="dash-side">
+          <div class="dash-metric">
+            <div>
+              <div class="mv">93.4<span class="trend up">▲ 2.1</span></div>
+              <div class="ml">Загрузка линии, %</div>
+            </div>
+            <svg class="spark" width="62" height="18" viewBox="0 0 62 18" fill="none">
+              <polyline points="1,13 11,11 21,14 31,8 41,9 51,5 61,3" stroke="rgba(159,216,245,.75)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dash-metric">
+            <div>
+              <div class="mv">02:14<span class="trend down">▼ 0.4</span></div>
+              <div class="ml">Средний простой</div>
+            </div>
+            <svg class="spark" width="62" height="18" viewBox="0 0 62 18" fill="none">
+              <polyline points="1,4 11,7 21,5 31,10 41,9 51,13 61,14" stroke="rgba(159,216,245,.75)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="dash-metric">
+            <div class="ml" style="margin-top:0;">Качество выпуска</div>
+            <div class="dash-gauge">
+              <svg width="54" height="54" viewBox="0 0 54 54">
+                <defs>
+                  <linearGradient id="gaugeGrad" gradientUnits="userSpaceOnUse" x1="6" y1="6" x2="48" y2="48">
+                    <stop offset="0%" stop-color="#0878D1"/>
+                    <stop offset="100%" stop-color="#8AE6FF"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="4.5"/>
+                <circle cx="27" cy="27" r="21" fill="none" stroke="url(#gaugeGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="129.3 132"/>
+              </svg>
+              <div class="gv">98</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-list">
+        <div class="lh"><span>Участок</span><span>Загрузка · статус</span></div>
+        <div class="r"><span class="name"><span class="dot"></span>Линия сборки A</span><span class="right"><span class="track"><i style="width:96%"></i></span><span class="pct">96%</span><em>норма</em></span></div>
+        <div class="r"><span class="name"><span class="dot"></span>Линия упаковки B</span><span class="right"><span class="track"><i style="width:91%"></i></span><span class="pct">91%</span><em>норма</em></span></div>
+        <div class="r"><span class="name"><span class="dot"></span>Узел контроля качества</span><span class="right"><span class="track"><i style="width:98%"></i></span><span class="pct">98%</span><em>норма</em></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <div class="news-head">
+      <div><span class="label">Обновления</span><h2>Новости<span class="news-badge">новое</span></h2></div>
+      <div class="news-nav">
+        <button class="news-arrow" id="newsPrev" type="button" aria-label="Предыдущие новости">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="news-arrow" id="newsNext" type="button" aria-label="Следующие новости">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="news" id="newsTrack" aria-live="polite">
+      <div class="news-post"><p style="color:var(--muted);">Загружаем новости…</p></div>
+    </div>
+    <div class="news-bar" id="newsBar"><div class="news-bar-thumb" id="newsThumb"></div></div>
+  </div>
+</section>
+
+<!-- ВРЕМЕННО СКРЫТО (отложено) — блок "Прямой канал связи"
+<section>
+  <div class="wrap">
+    <div class="comm-wrap">
+      <div>
+        <span class="label">В разработке</span>
+        <h3>Прямой канал связи на сайте</h3>
+        <p>Следующий этап — встроенный чат: посетитель напишет консультанту без звонка и формы, приложит фото участка и получит ответ в рабочее время.</p>
+      </div>
+      <div class="chat-mock">
+        <div class="chat-line"><div class="bubble them">Беретесь ли вы за автоматизацию линии упаковки?</div></div>
+        <div class="chat-line me"><div class="bubble me">Да, пришлите фото участка — оценим сроки сегодня.</div></div>
+        <div class="chat-status">● отвечаем в течение 15 минут</div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+
+<section id="team-wrap">
+  <div class="wrap">
+    <div class="svc-head" style="border-bottom:none; margin-bottom:32px;">
+      <div><span class="label">Команда</span><h2>Инженеры за работой</h2></div>
+    </div>
+    <div class="team">
+      <div class="member"><div class="m-photo">МС</div><h3>Максим Судьёв</h3><div class="role">Руководитель</div><p class="desc">Ведёт проект от консультации до сопровождения запуска.</p></div>
+      <div class="member"><div class="m-photo">МГ</div><h3>Максим Галкин</h3><div class="role">Инженер-проектировщик</div><p class="desc">Проектирует технические решения для линий и оборудования.</p></div>
+      <div class="member"><div class="m-photo">?</div><h3 style="color:var(--muted); font-weight:500;">Имя уточняется</h3><div class="role">Аналитик процессов</div><p class="desc">Разбирает производственные процессы и ищет точки роста.</p></div>
+      <div class="member"><div class="m-photo">В</div><h3>Виктория</h3><div class="role">Консультант, коуч</div><p class="desc">Работает с руководителями и персоналом над личным успехом.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <span class="label">Обратная связь</span>
+      <h2 style="margin-top:10px;">Обсудить проект</h2>
+      <form id="leadForm" style="margin-top:28px;" action="https://formsubmit.co/sm.international@yandex.ru" method="POST">
+        <input type="hidden" name="_subject" value="Новая заявка с сайта Smart Module International">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_next" value="https://smart-module-international.ru/thanks.html">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="field"><label for="f-name">Имя</label><input id="f-name" name="Имя" type="text" placeholder="Как к вам обращаться" required></div>
+        <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="Телефон" type="tel" placeholder="+7" required></div>
+        <div class="field"><label for="f-mail">Электронная почта</label><input id="f-mail" name="Email" type="email" placeholder="you@company.ru" required></div>
+        <div class="field"><label for="f-msg">Комментарий</label><textarea id="f-msg" name="Комментарий" rows="4" placeholder="Кратко опишите задачу"></textarea></div>
+        <div class="field consent">
+          <label class="consent-label"><input type="checkbox" name="Согласие" value="Дано" required><span>Согласен(-на) с <a href="privacy.html" target="_blank">политикой обработки персональных данных</a></span></label>
+        </div>
+        <button type="submit" class="btn btn-fill">Отправить →</button>
+      </form>
+    </div>
+    <div>
+      <span class="label">Контакты</span>
+      <dl class="req">
+        <dt>Телефон</dt><dd>8 (916) 000-16-68</dd>
+        <dt>Электронная почта</dt><dd>sm.international@yandex.ru</dd>
+        <dt>Организация</dt><dd>ООО «СМИ» (Смарт Модуль Интернэшнл)</dd>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="brand">SMI <span>/</span> SMART MODULE INTERNATIONAL</div>
+    <div class="legal">ОГРН 1265000036168 · ИНН 5031164520 · КПП 503101001 · <a href="privacy.html" style="color:inherit;">Политика конфиденциальности</a></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', function(){
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  var menuToggle = document.getElementById('menuToggle');
+  var mobileNav = document.getElementById('mobileNav');
+  if(menuToggle && mobileNav){
+    var closeMenu = function(){
+      mobileNav.classList.remove('open');
+      mobileNav.setAttribute('aria-hidden', 'true');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+    var openMenu = function(){
+      mobileNav.classList.add('open');
+      mobileNav.setAttribute('aria-hidden', 'false');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+    menuToggle.addEventListener('click', function(){
+      if(mobileNav.classList.contains('open')) closeMenu(); else openMenu();
+    });
+    mobileNav.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeMenu();
+    });
+    window.addEventListener('resize', function(){
+      if(window.innerWidth > 900) closeMenu();
+    });
+  }
+
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stats = document.querySelectorAll('.stat .v');
+  if(stats.length){
+    var animate = function(el){
+      var target = parseFloat(el.dataset.count);
+      var suffix = el.dataset.suffix || '';
+      if(reduced){ el.textContent = target + suffix; return; }
+      var start = null, dur = 1100;
+      function step(ts){
+        if(start === null) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    };
+    if('IntersectionObserver' in window){
+      var io = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if(en.isIntersecting){ animate(en.target); io.unobserve(en.target); }
+        });
+      }, {threshold:0.6});
+      stats.forEach(function(el){ io.observe(el); });
+    } else { stats.forEach(animate); }
+  }
+
+  if(!reduced){
+    document.querySelectorAll('.draw').forEach(function(p){
+      var len = p.getTotalLength();
+      p.style.strokeDasharray = len;
+      p.style.strokeDashoffset = len;
+      p.style.transition = 'stroke-dashoffset 1.6s ease';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ p.style.strokeDashoffset = 0; }); });
+    });
+  }
+
+  // news slider: custom scrollbar + arrows
+  var track = document.getElementById('newsTrack');
+  var bar = document.getElementById('newsBar');
+  var thumb = document.getElementById('newsThumb');
+  var prev = document.getElementById('newsPrev');
+  var next = document.getElementById('newsNext');
+
+  // load news from news.json so it can be edited through /admin without touching this file
+  if(track){
+    fetch('news.json?_=' + Date.now())
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(new Error('news.json ' + r.status)); })
+      .then(function(data){
+        var posts = (data && data.posts) || [];
+        if(!posts.length){ track.innerHTML = ''; return; }
+        var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+        track.innerHTML = posts.map(function(p){
+          return '<div class="news-post">' +
+            (p.image ? '<img src="' + esc(p.image) + '" alt="" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:3px;margin-bottom:14px;">' : '') +
+            '<div class="news-date">' + esc(p.date) + '</div>' +
+            '<h3>' + esc(p.title) + '</h3>' +
+            '<p>' + esc(p.excerpt) + '</p>' +
+            '<div class="rm">Читать далее →</div>' +
+          '</div>';
+        }).join('');
+      })
+      .catch(function(err){
+        track.innerHTML = '<div class="news-post"><p style="color:var(--muted);">Не удалось загрузить новости.</p></div>';
+        console.error('news.json load failed:', err);
+      })
+      .finally(function(){
+        if(typeof sync === 'function') sync();
+      });
+  }
+
+  if(track && bar && thumb){
+    var maxScroll = function(){ return track.scrollWidth - track.clientWidth; };
+
+    var sync = function(){
+      var max = maxScroll();
+      var barW = bar.clientWidth;
+      if(max <= 1){
+        bar.style.display = 'none';
+        if(prev) prev.disabled = true;
+        if(next) next.disabled = true;
+        return;
+      }
+      bar.style.display = '';
+      var ratio = track.clientWidth / track.scrollWidth;
+      var thumbW = Math.max(36, Math.round(barW * ratio));
+      thumb.style.width = thumbW + 'px';
+      thumb.style.left = Math.round((track.scrollLeft / max) * (barW - thumbW)) + 'px';
+      if(prev) prev.disabled = track.scrollLeft <= 1;
+      if(next) next.disabled = track.scrollLeft >= max - 1;
+    };
+
+    var scrollToRatio = function(r){
+      track.scrollLeft = Math.max(0, Math.min(1, r)) * maxScroll();
+    };
+
+    var pointerToRatio = function(clientX){
+      var rect = bar.getBoundingClientRect();
+      var thumbW = thumb.offsetWidth;
+      return (clientX - rect.left - thumbW / 2) / (rect.width - thumbW);
+    };
+
+    var dragging = false;
+    var startDrag = function(e){
+      dragging = true;
+      bar.classList.add('dragging');
+      track.style.scrollBehavior = 'auto';
+      scrollToRatio(pointerToRatio(e.clientX));
+      if(bar.setPointerCapture && e.pointerId !== undefined) bar.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    };
+    var moveDrag = function(e){
+      if(!dragging) return;
+      scrollToRatio(pointerToRatio(e.clientX));
+    };
+    var endDrag = function(){
+      if(!dragging) return;
+      dragging = false;
+      bar.classList.remove('dragging');
+      track.style.scrollBehavior = '';
+    };
+
+    bar.addEventListener('pointerdown', startDrag);
+    bar.addEventListener('pointermove', moveDrag);
+    bar.addEventListener('pointerup', endDrag);
+    bar.addEventListener('pointercancel', endDrag);
+
+    var target = null;
+    var step = function(dir){
+      var card = track.querySelector('.news-post');
+      var w = card ? card.getBoundingClientRect().width + 1 : 300;
+      var base = (target === null) ? track.scrollLeft : target;
+      target = Math.max(0, Math.min(maxScroll(), base + dir * w));
+      track.scrollTo({left: target, behavior: 'smooth'});
+    };
+    var releaseTarget = function(){ target = null; };
+    if(prev) prev.addEventListener('click', function(){ step(-1); });
+    if(next) next.addEventListener('click', function(){ step(1); });
+    track.addEventListener('wheel', releaseTarget, {passive:true});
+    track.addEventListener('pointerdown', releaseTarget);
+    bar.addEventListener('pointerdown', releaseTarget);
+
+    track.addEventListener('scroll', function(){ requestAnimationFrame(sync); });
+    window.addEventListener('resize', function(){ releaseTarget(); sync(); });
+    sync();
+  }
+})();
+</script>
+</body>
+</html>

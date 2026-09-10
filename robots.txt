@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://smart-module-international.ru/sitemap.xml

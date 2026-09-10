@@ -1,0 +1,36 @@
+backend:
+  name: github
+  repo: sttopalin-wq/smart-module-international
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+locale: "ru"
+publish_mode: simple
+
+media_folder: "assets/news"
+public_folder: "/assets/news"
+
+site_url: "https://smart-module-international.ru"
+display_url: "https://smart-module-international.ru"
+logo_url: "/assets/icon-192.png"
+
+collections:
+  - name: "news"
+    label: "Новости"
+    label_singular: "Лента новостей"
+    description: "Карточки, которые видят посетители сайта в разделе «Новости». Порядок в списке = порядок на сайте."
+    files:
+      - name: "feed"
+        label: "Лента новостей"
+        file: "news.json"
+        fields:
+          - label: "Посты"
+            name: "posts"
+            widget: "list"
+            summary: "{{title}} — {{date}}"
+            fields:
+              - { label: "Дата", name: "date", widget: "string", hint: "в формате ДД.ММ.ГГГГ, например 15.09.2026" }
+              - { label: "Заголовок", name: "title", widget: "string" }
+              - { label: "Краткое описание", name: "excerpt", widget: "text" }
+              - { label: "Фото (необязательно)", name: "image", widget: "image", required: false, hint: "Появится сверху карточки на сайте" }
