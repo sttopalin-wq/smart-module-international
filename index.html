@@ -297,11 +297,23 @@
   .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:11.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
   .field input, .field textarea{width:100%; background:var(--white); border:1px solid var(--line); border-radius:3px; padding:13px 14px; font-family:'IBM Plex Sans',sans-serif; font-size:14.5px; color:var(--graphite);}
   .field input:focus, .field textarea:focus{outline:2px solid var(--tech-blue); outline-offset:1px;}
+  .field input[readonly]{background:var(--lbg); color:var(--muted);}
   .consent-label{display:flex; align-items:flex-start; gap:10px; cursor:pointer; font-size:12.5px; line-height:1.5; color:var(--muted);}
   .consent-label input{width:16px; height:16px; margin:2px 0 0; flex:none; accent-color:var(--tech-blue);}
   .consent-label a{color:var(--tech-blue);}
   .req dt{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--muted); margin-top:18px; text-transform:uppercase; letter-spacing:.05em;}
   .req dd{margin:4px 0 0; font-size:16px;}
+
+  .lead-gate{margin-top:28px; padding:26px; background:var(--white); border:1px solid var(--line); border-radius:4px;}
+  .lead-gate .gate-note{margin:0 0 20px; font-size:14px; color:var(--muted); line-height:1.55;}
+  .gate-actions{display:flex; gap:12px; margin-top:24px;}
+  .gate-actions .btn{width:auto; flex:1;}
+  .gate-switch{margin-top:16px; font-size:12.5px; color:var(--muted); text-align:center;}
+  .gate-switch a{color:var(--tech-blue); text-decoration:none; cursor:pointer;}
+  .gate-msg{font-size:13px; padding:10px 12px; border-radius:3px; margin-bottom:16px;}
+  .gate-msg.error{background:#FDECEC; color:#B3261E;}
+  .lead-user-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 14px; background:var(--white); border:1px solid var(--line); border-radius:3px; margin-bottom:20px; font-size:13.5px;}
+  .lead-user-row button{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--tech-blue); background:none; border:none; cursor:pointer; padding:0;}
 
   footer{background:var(--navy-deep); color:#fff; padding:36px 0;}
   .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;}
@@ -339,6 +351,7 @@
   }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <script src="assets/firebase-config.js"></script>
 </head>
@@ -755,14 +768,28 @@
     <div>
       <span class="label">Обратная связь</span>
       <h2 style="margin-top:10px;">Обсудить проект</h2>
-      <form id="leadForm" style="margin-top:28px;" action="https://formsubmit.co/sm.international@yandex.ru" method="POST">
+
+      <div id="leadGate" class="lead-gate" hidden>
+        <p class="gate-note">Чтобы оставить заявку, войдите или зарегистрируйтесь — это займёт меньше минуты.</p>
+        <div id="gateMsg"></div>
+        <div class="field"><label for="g-email">Почта</label><input id="g-email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
+        <div class="field"><label for="g-pass">Пароль</label><input id="g-pass" type="password" autocomplete="current-password"></div>
+        <div class="field" id="gConfirmField" hidden><label for="g-pass2">Повторите пароль</label><input id="g-pass2" type="password" autocomplete="new-password"></div>
+        <div class="gate-actions">
+          <button id="gateSubmitBtn" type="button" class="btn btn-fill">Войти</button>
+        </div>
+        <div class="gate-switch"><span id="gateToRegisterRow">Ещё нет входа? <a id="gateToRegister">Зарегистрироваться</a></span><span id="gateToLoginRow" hidden>Уже есть вход? <a id="gateToLogin">Войти</a></span></div>
+      </div>
+
+      <form id="leadForm" style="margin-top:28px;" action="https://formsubmit.co/sm.international@yandex.ru" method="POST" hidden>
         <input type="hidden" name="_subject" value="Новая заявка с сайта Smart Module International">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" value="https://smart-module-international.ru/thanks.html">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="lead-user-row"><span>Вы вошли как <strong id="leadUserEmail"></strong></span><button type="button" id="leadSignOut">Выйти</button></div>
         <div class="field"><label for="f-name">Имя</label><input id="f-name" name="Имя" type="text" placeholder="Как к вам обращаться" required></div>
         <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="Телефон" type="tel" placeholder="+7" required></div>
-        <div class="field"><label for="f-mail">Электронная почта</label><input id="f-mail" name="Email" type="email" placeholder="you@company.ru" required></div>
+        <div class="field"><label for="f-mail">Электронная почта</label><input id="f-mail" name="Email" type="email" placeholder="you@company.ru" required readonly></div>
         <div class="field"><label for="f-msg">Комментарий</label><textarea id="f-msg" name="Комментарий" rows="4" placeholder="Кратко опишите задачу"></textarea></div>
         <div class="field consent">
           <label class="consent-label"><input type="checkbox" name="Согласие" value="Дано" required><span>Согласен(-на) с <a href="privacy.html" target="_blank">политикой обработки персональных данных</a></span></label>
@@ -993,6 +1020,91 @@
     window.addEventListener('resize', function(){ releaseTarget(); sync(); });
     sync();
   }
+
+  // contact form gate: visitor logs in / registers before leaving a lead
+  (function(){
+    var gate = document.getElementById('leadGate');
+    var leadForm = document.getElementById('leadForm');
+    if(!gate || !leadForm) return;
+
+    var gcfg = window.FIREBASE_CONFIG || {};
+    var gReady = window.firebase && gcfg.apiKey && gcfg.apiKey.indexOf('ВСТАВЬТЕ') !== 0;
+    if(!gReady){
+      // Firebase not wired up yet — don't block leads, just show the form
+      gate.hidden = true;
+      leadForm.hidden = false;
+      return;
+    }
+
+    var gApp = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(gcfg);
+    var gAuth = firebase.auth();
+    var gateMsg = document.getElementById('gateMsg');
+    var showGateMsg = function(text){ gateMsg.innerHTML = text ? '<div class="gate-msg error">' + text + '</div>' : ''; };
+
+    var gMode = 'login';
+    var confirmField = document.getElementById('gConfirmField');
+    var submitBtn = document.getElementById('gateSubmitBtn');
+    var toRegisterRow = document.getElementById('gateToRegisterRow');
+    var toLoginRow = document.getElementById('gateToLoginRow');
+
+    var setGateMode = function(m){
+      gMode = m;
+      showGateMsg('');
+      if(m === 'register'){
+        submitBtn.textContent = 'Зарегистрироваться';
+        confirmField.hidden = false;
+        toRegisterRow.hidden = true;
+        toLoginRow.hidden = false;
+      } else {
+        submitBtn.textContent = 'Войти';
+        confirmField.hidden = true;
+        toRegisterRow.hidden = false;
+        toLoginRow.hidden = true;
+      }
+    };
+    document.getElementById('gateToRegister').addEventListener('click', function(){ setGateMode('register'); });
+    document.getElementById('gateToLogin').addEventListener('click', function(){ setGateMode('login'); });
+
+    submitBtn.addEventListener('click', function(){
+      var email = document.getElementById('g-email').value.trim();
+      var pass = document.getElementById('g-pass').value;
+      if(!email || !pass){ showGateMsg('Введите почту и пароль.'); return; }
+      if(gMode === 'register'){
+        var pass2 = document.getElementById('g-pass2').value;
+        if(pass.length < 6){ showGateMsg('Пароль должен быть не короче 6 символов.'); return; }
+        if(pass !== pass2){ showGateMsg('Пароли не совпадают.'); return; }
+        showGateMsg('');
+        gAuth.createUserWithEmailAndPassword(email, pass).catch(function(err){
+          var t = 'Не удалось зарегистрироваться.';
+          if(err.code === 'auth/email-already-in-use') t = 'Такая почта уже зарегистрирована — войдите.';
+          showGateMsg(t);
+        });
+      } else {
+        showGateMsg('');
+        gAuth.signInWithEmailAndPassword(email, pass).catch(function(){
+          showGateMsg('Не удалось войти: неверная почта или пароль.');
+        });
+      }
+    });
+    document.getElementById('g-pass').addEventListener('keydown', function(e){ if(e.key === 'Enter') submitBtn.click(); });
+
+    var signOutBtn = document.getElementById('leadSignOut');
+    if(signOutBtn) signOutBtn.addEventListener('click', function(){ gAuth.signOut(); });
+
+    gAuth.onAuthStateChanged(function(user){
+      if(user){
+        gate.hidden = true;
+        leadForm.hidden = false;
+        var emailLabel = document.getElementById('leadUserEmail');
+        if(emailLabel) emailLabel.textContent = user.email || '';
+        var mailField = document.getElementById('f-mail');
+        if(mailField) mailField.value = user.email || '';
+      } else {
+        gate.hidden = false;
+        leadForm.hidden = true;
+      }
+    });
+  })();
 })();
 </script>
 </body>
