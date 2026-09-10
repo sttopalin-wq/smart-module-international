@@ -1,11 +1,10 @@
 // Значения берутся в консоли Firebase: Project settings (шестерёнка) → General →
 // Your apps → веб-приложение (</>) → SDK setup and configuration → Config.
-// Вставьте сюда свои значения вместо ВСТАВЬТЕ_...
 window.FIREBASE_CONFIG = {
-  apiKey: "ВСТАВЬТЕ_apiKey",
-  authDomain: "ВСТАВЬТЕ_authDomain",
-  projectId: "ВСТАВЬТЕ_projectId",
-  storageBucket: "ВСТАВЬТЕ_storageBucket",
-  messagingSenderId: "ВСТАВЬТЕ_messagingSenderId",
-  appId: "ВСТАВЬТЕ_appId"
+  apiKey: "AIzaSyDMtP5U69ipEshh3-C76rEtXtPfDFseRnk",
+  authDomain: "smart-module-d3c83.firebaseapp.com",
+  projectId: "smart-module-d3c83",
+  storageBucket: "smart-module-d3c83.firebasestorage.app",
+  messagingSenderId: "421472188936",
+  appId: "1:421472188936:web:0eaf606b7950439ac5afbd"
 };
