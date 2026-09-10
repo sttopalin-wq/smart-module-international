@@ -6,8 +6,243 @@
 <title>Управление новостями — Smart Module International</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --navy-deep:#071525; --navy-dark:#0B2238; --tech-blue:#0878D1; --electric:#16A8FF;
+    --white:#F7F9FC; --lbg:#E8F0F6; --graphite:#182532; --line:rgba(24,37,50,0.14); --muted:#5C6B7A;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; min-height:100vh; background:var(--lbg); color:var(--graphite); font-family:'IBM Plex Sans', system-ui, sans-serif;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  h1,h2{font-family:'Archivo',sans-serif; font-weight:800; margin:0;}
+  [hidden]{display:none !important;}
+
+  header{background:var(--navy-deep); padding:18px 0;}
+  .head-row{max-width:840px; margin:0 auto; padding:0 24px; display:flex; align-items:center; justify-content:space-between;}
+  .brand{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:14px; color:#fff; text-decoration:none;}
+  .brand span{color:var(--electric);}
+  #signOutBtn{font-family:'IBM Plex Mono',monospace; font-size:12px; color:#93A9C0; background:none; border:1px solid rgba(255,255,255,.25); border-radius:3px; padding:8px 14px; cursor:pointer;}
+  #signOutBtn:hover{color:#fff; border-color:#fff;}
+
+  /* login */
+  #loginView{min-height:80vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .login-card{width:100%; max-width:360px; background:#fff; border:1px solid var(--line); border-radius:6px; padding:36px;}
+  .login-card h1{font-size:22px; margin-bottom:6px;}
+  .login-card p.sub{color:var(--muted); font-size:13.5px; margin:0 0 24px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); margin-bottom:7px;}
+  .field input, .field textarea{width:100%; background:var(--white); border:1px solid var(--line); border-radius:3px; padding:11px 12px; font-family:'IBM Plex Sans',sans-serif; font-size:14.5px; color:var(--graphite);}
+  .field input:focus, .field textarea:focus{outline:2px solid var(--tech-blue); outline-offset:1px;}
+  .btn{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:12.5px; letter-spacing:.05em; text-transform:uppercase; padding:12px 20px; border-radius:3px; border:1.5px solid var(--tech-blue); background:var(--tech-blue); color:#fff; cursor:pointer; width:100%;}
+  .btn:hover{background:var(--electric); border-color:var(--electric);}
+  .btn:disabled{opacity:.55; cursor:default;}
+  .btn-line{background:transparent; color:var(--tech-blue);}
+  .msg{font-size:13px; padding:10px 12px; border-radius:3px; margin-bottom:16px;}
+  .msg.error{background:#FDECEC; color:#B3261E;}
+  .msg.ok{background:#E7F6EC; color:#1E7A3D;}
+
+  /* admin */
+  #adminView{max-width:840px; margin:0 auto; padding:40px 24px 90px;}
+  .panel{background:#fff; border:1px solid var(--line); border-radius:6px; padding:28px; margin-bottom:28px;}
+  .panel h2{font-size:19px; margin-bottom:18px;}
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .post-item{display:flex; gap:14px; padding:16px 0; border-bottom:1px solid var(--line);}
+  .post-item:last-child{border-bottom:none;}
+  .post-item img{width:64px; height:64px; object-fit:cover; border-radius:3px; flex:none; background:var(--lbg);}
+  .post-item .ph{width:64px; height:64px; border-radius:3px; flex:none; background:var(--lbg); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:10px; text-align:center;}
+  .post-item .info{flex:1; min-width:0;}
+  .post-item .date{font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--tech-blue);}
+  .post-item h3{font-size:15px; margin:4px 0; font-weight:600;}
+  .post-item p{font-size:13px; color:var(--muted); margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .del-btn{font-family:'IBM Plex Mono',monospace; font-size:11px; color:#B3261E; background:none; border:1px solid #F2C9C7; border-radius:3px; padding:7px 12px; cursor:pointer; align-self:center; flex:none;}
+  .del-btn:hover{background:#FDECEC;}
+  .empty{color:var(--muted); font-size:14px; padding:16px 0;}
+  .config-warning{max-width:520px; margin:60px auto; background:#FFF6E5; border:1px solid #F2D98A; color:#7A5B00; padding:20px 22px; border-radius:6px; font-size:14px; line-height:1.6;}
+</style>
 </head>
 <body>
-<script src="https://cdn.jsdelivr.net/npm/decap-cms@^3/dist/decap-cms.js"></script>
+
+<header>
+  <div class="head-row">
+    <a href="../index.html" class="brand">SMI <span>/</span> АДМИНКА НОВОСТЕЙ</a>
+    <button id="signOutBtn" hidden>Выйти</button>
+  </div>
+</header>
+
+<div id="configWarning" class="config-warning" hidden>
+  Firebase ещё не настроен. Откройте файл <code>assets/firebase-config.js</code> и вставьте свои значения из консоли Firebase — иначе вход и сохранение новостей работать не будут.
+</div>
+
+<div id="loginView" hidden>
+  <div class="login-card">
+    <h1>Вход</h1>
+    <p class="sub">Только для управления новостями сайта</p>
+    <div id="loginMsg"></div>
+    <div class="field"><label for="email">Почта</label><input id="email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
+    <div class="field"><label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password"></div>
+    <button id="loginBtn" class="btn">Войти</button>
+  </div>
+</div>
+
+<div id="adminView" hidden>
+  <div class="panel">
+    <h2>Добавить новость</h2>
+    <div id="formMsg"></div>
+    <div class="row2">
+      <div class="field"><label for="pDate">Дата</label><input id="pDate" type="date"></div>
+      <div class="field"><label for="pImage">Фото (необязательно)</label><input id="pImage" type="file" accept="image/*"></div>
+    </div>
+    <div class="field"><label for="pTitle">Заголовок</label><input id="pTitle" type="text" placeholder="Заголовок новости"></div>
+    <div class="field"><label for="pExcerpt">Краткое описание</label><textarea id="pExcerpt" rows="3" placeholder="1–2 предложения — покажется на карточке"></textarea></div>
+    <button id="addBtn" class="btn">Опубликовать →</button>
+  </div>
+
+  <div class="panel">
+    <h2>Опубликованные новости</h2>
+    <div id="postsList"><div class="empty">Загрузка…</div></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage-compat.js"></script>
+<script src="../assets/firebase-config.js"></script>
+<script>
+(function(){
+  var cfg = window.FIREBASE_CONFIG || {};
+  var notConfigured = !cfg.apiKey || cfg.apiKey.indexOf('ВСТАВЬТЕ') === 0;
+
+  if(notConfigured){
+    document.getElementById('configWarning').hidden = false;
+    return;
+  }
+
+  firebase.initializeApp(cfg);
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+  var storage = firebase.storage();
+
+  var loginView = document.getElementById('loginView');
+  var adminView = document.getElementById('adminView');
+  var signOutBtn = document.getElementById('signOutBtn');
+  var loginMsg = document.getElementById('loginMsg');
+  var formMsg = document.getElementById('formMsg');
+
+  function showMsg(el, text, type){
+    el.innerHTML = text ? '<div class="msg ' + type + '">' + text + '</div>' : '';
+  }
+
+  auth.onAuthStateChanged(function(user){
+    if(user){
+      loginView.hidden = true;
+      adminView.hidden = false;
+      signOutBtn.hidden = false;
+      loadPosts();
+    } else {
+      loginView.hidden = false;
+      adminView.hidden = true;
+      signOutBtn.hidden = true;
+    }
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', function(){
+    var email = document.getElementById('email').value.trim();
+    var pass = document.getElementById('password').value;
+    if(!email || !pass){ showMsg(loginMsg, 'Введите почту и пароль.', 'error'); return; }
+    showMsg(loginMsg, '', '');
+    auth.signInWithEmailAndPassword(email, pass).catch(function(err){
+      showMsg(loginMsg, 'Не удалось войти: неверная почта или пароль.', 'error');
+      console.error(err);
+    });
+  });
+  document.getElementById('password').addEventListener('keydown', function(e){
+    if(e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+
+  signOutBtn.addEventListener('click', function(){ auth.signOut(); });
+
+  function todayISO(){
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  document.getElementById('pDate').value = todayISO();
+
+  function isoToRu(iso){
+    var parts = iso.split('-');
+    return parts[2] + '.' + parts[1] + '.' + parts[0];
+  }
+
+  document.getElementById('addBtn').addEventListener('click', function(){
+    var dateIso = document.getElementById('pDate').value;
+    var title = document.getElementById('pTitle').value.trim();
+    var excerpt = document.getElementById('pExcerpt').value.trim();
+    var fileInput = document.getElementById('pImage');
+    var file = fileInput.files[0];
+
+    if(!dateIso || !title){ showMsg(formMsg, 'Заполните дату и заголовок.', 'error'); return; }
+
+    var addBtn = document.getElementById('addBtn');
+    addBtn.disabled = true;
+    showMsg(formMsg, 'Публикуем…', '');
+
+    var save = function(imageUrl){
+      db.collection('news').add({
+        date: isoToRu(dateIso),
+        title: title,
+        excerpt: excerpt,
+        image: imageUrl || '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(function(){
+        showMsg(formMsg, 'Опубликовано.', 'ok');
+        document.getElementById('pTitle').value = '';
+        document.getElementById('pExcerpt').value = '';
+        fileInput.value = '';
+        document.getElementById('pDate').value = todayISO();
+        addBtn.disabled = false;
+        loadPosts();
+      }).catch(function(err){
+        showMsg(formMsg, 'Ошибка сохранения: ' + err.message, 'error');
+        addBtn.disabled = false;
+      });
+    };
+
+    if(file){
+      var ref = storage.ref().child('news/' + Date.now() + '_' + file.name);
+      ref.put(file).then(function(snap){ return snap.ref.getDownloadURL(); }).then(save).catch(function(err){
+        showMsg(formMsg, 'Ошибка загрузки фото: ' + err.message, 'error');
+        addBtn.disabled = false;
+      });
+    } else {
+      save('');
+    }
+  });
+
+  function loadPosts(){
+    var list = document.getElementById('postsList');
+    db.collection('news').orderBy('createdAt', 'desc').get().then(function(snap){
+      if(snap.empty){ list.innerHTML = '<div class="empty">Пока нет новостей.</div>'; return; }
+      list.innerHTML = '';
+      snap.forEach(function(doc){
+        var p = doc.data();
+        var row = document.createElement('div');
+        row.className = 'post-item';
+        row.innerHTML =
+          (p.image ? '<img src="' + p.image + '" alt="">' : '<div class="ph">без фото</div>') +
+          '<div class="info"><div class="date">' + (p.date||'') + '</div><h3>' + (p.title||'') + '</h3><p>' + (p.excerpt||'') + '</p></div>' +
+          '<button class="del-btn" type="button">Удалить</button>';
+        row.querySelector('.del-btn').addEventListener('click', function(){
+          if(!confirm('Удалить новость «' + p.title + '»?')) return;
+          db.collection('news').doc(doc.id).delete().then(loadPosts);
+        });
+        list.appendChild(row);
+      });
+    }).catch(function(err){
+      list.innerHTML = '<div class="empty">Не удалось загрузить: ' + err.message + '</div>';
+    });
+  }
+})();
+</script>
 </body>
 </html>

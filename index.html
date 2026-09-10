@@ -338,6 +338,9 @@
     *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
   }
 </style>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="assets/firebase-config.js"></script>
 </head>
 <body>
 
@@ -865,29 +868,52 @@
   var prev = document.getElementById('newsPrev');
   var next = document.getElementById('newsNext');
 
-  // load news from news.json so it can be edited through /admin without touching this file
-  if(track){
-    fetch('news.json?_=' + Date.now())
+  // news: read live from Firebase (admin-managed) if configured, otherwise fall back to news.json
+  var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+  var renderPosts = function(posts){
+    if(!posts.length){ track.innerHTML = '<div class="news-post"><p style="color:var(--muted);">Пока нет новостей.</p></div>'; return; }
+    track.innerHTML = posts.map(function(p){
+      return '<div class="news-post">' +
+        (p.image ? '<img src="' + esc(p.image) + '" alt="" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:3px;margin-bottom:14px;">' : '') +
+        '<div class="news-date">' + esc(p.date) + '</div>' +
+        '<h3>' + esc(p.title) + '</h3>' +
+        '<p>' + esc(p.excerpt) + '</p>' +
+        '<div class="rm">Читать далее →</div>' +
+      '</div>';
+    }).join('');
+  };
+  var loadFromJson = function(){
+    return fetch('news.json?_=' + Date.now())
       .then(function(r){ return r.ok ? r.json() : Promise.reject(new Error('news.json ' + r.status)); })
-      .then(function(data){
-        var posts = (data && data.posts) || [];
-        if(!posts.length){ track.innerHTML = ''; return; }
-        var esc = function(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
-        track.innerHTML = posts.map(function(p){
-          return '<div class="news-post">' +
-            (p.image ? '<img src="' + esc(p.image) + '" alt="" style="width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:3px;margin-bottom:14px;">' : '') +
-            '<div class="news-date">' + esc(p.date) + '</div>' +
-            '<h3>' + esc(p.title) + '</h3>' +
-            '<p>' + esc(p.excerpt) + '</p>' +
-            '<div class="rm">Читать далее →</div>' +
-          '</div>';
-        }).join('');
-      })
+      .then(function(data){ renderPosts((data && data.posts) || []); })
       .catch(function(err){
         track.innerHTML = '<div class="news-post"><p style="color:var(--muted);">Не удалось загрузить новости.</p></div>';
         console.error('news.json load failed:', err);
-      })
-      .finally(function(){
+      });
+  };
+
+  if(track){
+    var cfg = window.FIREBASE_CONFIG || {};
+    var firebaseReady = window.firebase && cfg.apiKey && cfg.apiKey.indexOf('ВСТАВЬТЕ') !== 0;
+    var newsPromise;
+    if(firebaseReady){
+      try{
+        var app = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(cfg);
+        newsPromise = firebase.firestore().collection('news').orderBy('createdAt', 'desc').get()
+          .then(function(snap){
+            var posts = [];
+            snap.forEach(function(doc){ posts.push(doc.data()); });
+            renderPosts(posts);
+          })
+          .catch(function(err){ console.error('Firestore news load failed, falling back to news.json:', err); return loadFromJson(); });
+      } catch(err){
+        console.error('Firebase init failed, falling back to news.json:', err);
+        newsPromise = loadFromJson();
+      }
+    } else {
+      newsPromise = loadFromJson();
+    }
+    newsPromise.finally(function(){
         if(typeof sync === 'function') sync();
       });
   }
