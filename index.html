@@ -769,33 +769,33 @@
       <span class="label">Обратная связь</span>
       <h2 style="margin-top:10px;">Обсудить проект</h2>
 
-      <div id="leadGate" class="lead-gate" hidden>
-        <p class="gate-note">Чтобы оставить заявку, войдите или зарегистрируйтесь — это займёт меньше минуты.</p>
-        <div id="gateMsg"></div>
-        <div class="field"><label for="g-email">Почта</label><input id="g-email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
-        <div class="field"><label for="g-pass">Пароль</label><input id="g-pass" type="password" autocomplete="current-password"></div>
-        <div class="field" id="gConfirmField" hidden><label for="g-pass2">Повторите пароль</label><input id="g-pass2" type="password" autocomplete="new-password"></div>
-        <div class="gate-actions">
-          <button id="gateSubmitBtn" type="button" class="btn btn-fill">Войти</button>
-        </div>
-        <div class="gate-switch"><span id="gateToRegisterRow">Ещё нет входа? <a id="gateToRegister">Зарегистрироваться</a></span><span id="gateToLoginRow" hidden>Уже есть вход? <a id="gateToLogin">Войти</a></span></div>
-      </div>
-
-      <form id="leadForm" style="margin-top:28px;" action="https://formsubmit.co/sm.international@yandex.ru" method="POST" hidden>
+      <form id="leadForm" style="margin-top:28px;" action="https://formsubmit.co/sm.international@yandex.ru" method="POST">
         <input type="hidden" name="_subject" value="Новая заявка с сайта Smart Module International">
         <input type="hidden" name="_template" value="table">
         <input type="hidden" name="_next" value="https://smart-module-international.ru/thanks.html">
         <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-        <div class="lead-user-row"><span>Вы вошли как <strong id="leadUserEmail"></strong></span><button type="button" id="leadSignOut">Выйти</button></div>
         <div class="field"><label for="f-name">Имя</label><input id="f-name" name="Имя" type="text" placeholder="Как к вам обращаться" required></div>
         <div class="field"><label for="f-phone">Телефон</label><input id="f-phone" name="Телефон" type="tel" placeholder="+7" required></div>
-        <div class="field"><label for="f-mail">Электронная почта</label><input id="f-mail" name="Email" type="email" placeholder="you@company.ru" required readonly></div>
+        <div class="field"><label for="f-mail">Электронная почта</label><input id="f-mail" name="Email" type="email" placeholder="you@company.ru" required></div>
         <div class="field"><label for="f-msg">Комментарий</label><textarea id="f-msg" name="Комментарий" rows="4" placeholder="Кратко опишите задачу"></textarea></div>
         <div class="field consent">
           <label class="consent-label"><input type="checkbox" name="Согласие" value="Дано" required><span>Согласен(-на) с <a href="privacy.html" target="_blank">политикой обработки персональных данных</a></span></label>
         </div>
         <button type="submit" class="btn btn-fill">Отправить →</button>
       </form>
+
+      <div id="leadGate" class="lead-gate" hidden>
+        <p class="gate-note">Чтобы отправить заявку, подтвердите почту — войдите или зарегистрируйтесь.</p>
+        <div id="gateMsg"></div>
+        <div class="field"><label for="g-email">Почта</label><input id="g-email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
+        <div class="field"><label for="g-pass">Пароль</label><input id="g-pass" type="password" autocomplete="current-password"></div>
+        <div class="field" id="gConfirmField" hidden><label for="g-pass2">Повторите пароль</label><input id="g-pass2" type="password" autocomplete="new-password"></div>
+        <div class="gate-actions">
+          <button id="gateSubmitBtn" type="button" class="btn btn-fill">Войти и отправить</button>
+          <button id="gateCancelBtn" type="button" class="btn btn-line">Назад</button>
+        </div>
+        <div class="gate-switch"><span id="gateToRegisterRow">Ещё нет входа? <a id="gateToRegister">Зарегистрироваться</a></span><span id="gateToLoginRow" hidden>Уже есть вход? <a id="gateToLogin">Войти</a></span></div>
+      </div>
     </div>
     <div>
       <span class="label">Контакты</span>
@@ -1021,7 +1021,8 @@
     sync();
   }
 
-  // contact form gate: visitor logs in / registers before leaving a lead
+  // contact form gate: form is shown right away; login/registration is asked
+  // only at the moment of submitting, after the fields are already filled in
   (function(){
     var gate = document.getElementById('leadGate');
     var leadForm = document.getElementById('leadForm');
@@ -1029,12 +1030,7 @@
 
     var gcfg = window.FIREBASE_CONFIG || {};
     var gReady = window.firebase && gcfg.apiKey && gcfg.apiKey.indexOf('ВСТАВЬТЕ') !== 0;
-    if(!gReady){
-      // Firebase not wired up yet — don't block leads, just show the form
-      gate.hidden = true;
-      leadForm.hidden = false;
-      return;
-    }
+    if(!gReady) return; // Firebase not wired up yet — let the form submit normally
 
     var gApp = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(gcfg);
     var gAuth = firebase.auth();
@@ -1044,19 +1040,21 @@
     var gMode = 'login';
     var confirmField = document.getElementById('gConfirmField');
     var submitBtn = document.getElementById('gateSubmitBtn');
+    var cancelBtn = document.getElementById('gateCancelBtn');
     var toRegisterRow = document.getElementById('gateToRegisterRow');
     var toLoginRow = document.getElementById('gateToLoginRow');
+    var pendingSubmit = false;
 
     var setGateMode = function(m){
       gMode = m;
       showGateMsg('');
       if(m === 'register'){
-        submitBtn.textContent = 'Зарегистрироваться';
+        submitBtn.textContent = 'Зарегистрироваться и отправить';
         confirmField.hidden = false;
         toRegisterRow.hidden = true;
         toLoginRow.hidden = false;
       } else {
-        submitBtn.textContent = 'Войти';
+        submitBtn.textContent = 'Войти и отправить';
         confirmField.hidden = true;
         toRegisterRow.hidden = false;
         toLoginRow.hidden = true;
@@ -1064,6 +1062,22 @@
     };
     document.getElementById('gateToRegister').addEventListener('click', function(){ setGateMode('register'); });
     document.getElementById('gateToLogin').addEventListener('click', function(){ setGateMode('login'); });
+
+    cancelBtn.addEventListener('click', function(){
+      pendingSubmit = false;
+      gate.hidden = true;
+      leadForm.hidden = false;
+    });
+
+    // intercept submit only while logged out; already-authenticated visitors submit normally
+    leadForm.addEventListener('submit', function(e){
+      if(gAuth.currentUser) return; // allow the real submit through
+      e.preventDefault();
+      pendingSubmit = true;
+      leadForm.hidden = true;
+      gate.hidden = false;
+      showGateMsg('');
+    });
 
     submitBtn.addEventListener('click', function(){
       var email = document.getElementById('g-email').value.trim();
@@ -1088,20 +1102,12 @@
     });
     document.getElementById('g-pass').addEventListener('keydown', function(e){ if(e.key === 'Enter') submitBtn.click(); });
 
-    var signOutBtn = document.getElementById('leadSignOut');
-    if(signOutBtn) signOutBtn.addEventListener('click', function(){ gAuth.signOut(); });
-
     gAuth.onAuthStateChanged(function(user){
-      if(user){
+      if(user && pendingSubmit){
+        pendingSubmit = false;
         gate.hidden = true;
         leadForm.hidden = false;
-        var emailLabel = document.getElementById('leadUserEmail');
-        if(emailLabel) emailLabel.textContent = user.email || '';
-        var mailField = document.getElementById('f-mail');
-        if(mailField) mailField.value = user.email || '';
-      } else {
-        gate.hidden = false;
-        leadForm.hidden = true;
+        leadForm.submit(); // DOM submit() doesn't re-trigger the 'submit' listener above
       }
     });
   })();
