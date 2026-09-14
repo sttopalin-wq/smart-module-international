@@ -43,6 +43,8 @@
   .msg{font-size:13px; padding:10px 12px; border-radius:3px; margin-bottom:16px;}
   .msg.error{background:#FDECEC; color:#B3261E;}
   .msg.ok{background:#E7F6EC; color:#1E7A3D;}
+  .switch-row{text-align:center; margin-top:18px; font-size:13px; color:var(--muted);}
+  .switch-row a{color:var(--tech-blue); text-decoration:none; cursor:pointer;}
 
   /* admin */
   #adminView{max-width:840px; margin:0 auto; padding:40px 24px 90px;}
@@ -78,12 +80,18 @@
 
 <div id="loginView" hidden>
   <div class="login-card">
-    <h1>Вход</h1>
-    <p class="sub">Только для управления новостями сайта</p>
+    <h1 id="authTitle">Вход</h1>
+    <p class="sub" id="authSub">Только для управления новостями сайта</p>
     <div id="loginMsg"></div>
     <div class="field"><label for="email">Почта</label><input id="email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
-    <div class="field"><label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password"></div>
+    <div class="field"><label for="password">Пароль</label><input id="password" type="password" autocomplete="current-password" placeholder="минимум 6 символов"></div>
+    <div class="field" id="confirmField" hidden><label for="password2">Повторите пароль</label><input id="password2" type="password" autocomplete="new-password"></div>
     <button id="loginBtn" class="btn">Войти</button>
+    <button id="registerBtn" class="btn" hidden>Зарегистрироваться</button>
+    <div class="switch-row">
+      <span id="toRegisterRow">Ещё нет входа? <a id="toRegister">Зарегистрироваться</a></span>
+      <span id="toLoginRow" hidden>Уже есть вход? <a id="toLogin">Войти</a></span>
+    </div>
   </div>
 </div>
 
@@ -149,6 +157,40 @@
     }
   });
 
+  // login / register mode toggle
+  var mode = 'login';
+  var authTitle = document.getElementById('authTitle');
+  var authSub = document.getElementById('authSub');
+  var loginBtn = document.getElementById('loginBtn');
+  var registerBtn = document.getElementById('registerBtn');
+  var confirmField = document.getElementById('confirmField');
+  var toRegisterRow = document.getElementById('toRegisterRow');
+  var toLoginRow = document.getElementById('toLoginRow');
+
+  function setMode(m){
+    mode = m;
+    showMsg(loginMsg, '', '');
+    if(m === 'register'){
+      authTitle.textContent = 'Регистрация';
+      authSub.textContent = 'Создайте логин и пароль для входа в управление новостями';
+      loginBtn.hidden = true;
+      registerBtn.hidden = false;
+      confirmField.hidden = false;
+      toRegisterRow.hidden = true;
+      toLoginRow.hidden = false;
+    } else {
+      authTitle.textContent = 'Вход';
+      authSub.textContent = 'Только для управления новостями сайта';
+      loginBtn.hidden = false;
+      registerBtn.hidden = true;
+      confirmField.hidden = true;
+      toRegisterRow.hidden = false;
+      toLoginRow.hidden = true;
+    }
+  }
+  document.getElementById('toRegister').addEventListener('click', function(){ setMode('register'); });
+  document.getElementById('toLogin').addEventListener('click', function(){ setMode('login'); });
+
   document.getElementById('loginBtn').addEventListener('click', function(){
     var email = document.getElementById('email').value.trim();
     var pass = document.getElementById('password').value;
@@ -160,8 +202,24 @@
     });
   });
 
+  registerBtn.addEventListener('click', function(){
+    var email = document.getElementById('email').value.trim();
+    var pass = document.getElementById('password').value;
+    var pass2 = document.getElementById('password2').value;
+    if(!email || !pass){ showMsg(loginMsg, 'Введите почту и пароль.', 'error'); return; }
+    if(pass.length < 6){ showMsg(loginMsg, 'Пароль должен быть не короче 6 символов.', 'error'); return; }
+    if(pass !== pass2){ showMsg(loginMsg, 'Пароли не совпадают.', 'error'); return; }
+    showMsg(loginMsg, '', '');
+    auth.createUserWithEmailAndPassword(email, pass).catch(function(err){
+      var text = 'Не удалось зарегистрироваться.';
+      if(err.code === 'auth/email-already-in-use') text = 'Такая почта уже зарегистрирована — попробуйте войти.';
+      showMsg(loginMsg, text, 'error');
+      console.error(err);
+    });
+  });
+
   document.getElementById('password').addEventListener('keydown', function(e){
-    if(e.key === 'Enter') document.getElementById('loginBtn').click();
+    if(e.key === 'Enter') (mode === 'register' ? registerBtn : loginBtn).click();
   });
 
   signOutBtn.addEventListener('click', function(){ auth.signOut(); });

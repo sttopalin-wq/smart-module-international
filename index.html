@@ -366,7 +366,8 @@
       <a href="#about">О компании</a>
       <a href="#contact">Контакты</a>
     </nav>
-    <a href="#contact" class="btn btn-line nav-desktop-cta">Обсудить проект →</a>
+    <a href="admin/" class="btn btn-line nav-desktop-cta">Зарегистрироваться</a>
+    <a href="#contact" class="btn btn-fill nav-desktop-cta">Обсудить проект →</a>
     <button class="menu-toggle" id="menuToggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav"><span></span></button>
   </div>
 </header>
@@ -375,6 +376,7 @@
   <a href="#process">Решения</a>
   <a href="#about">О компании</a>
   <a href="#contact">Контакты</a>
+  <a href="admin/" class="btn btn-line" style="margin-top:12px;">Зарегистрироваться</a>
   <a href="#contact" class="btn btn-fill">Обсудить проект →</a>
 </nav>
 
@@ -783,19 +785,6 @@
         </div>
         <button type="submit" class="btn btn-fill">Отправить →</button>
       </form>
-
-      <div id="leadGate" class="lead-gate" hidden>
-        <p class="gate-note">Чтобы отправить заявку, подтвердите почту — войдите или зарегистрируйтесь.</p>
-        <div id="gateMsg"></div>
-        <div class="field"><label for="g-email">Почта</label><input id="g-email" type="email" autocomplete="username" placeholder="you@company.ru"></div>
-        <div class="field"><label for="g-pass">Пароль</label><input id="g-pass" type="password" autocomplete="current-password"></div>
-        <div class="field" id="gConfirmField" hidden><label for="g-pass2">Повторите пароль</label><input id="g-pass2" type="password" autocomplete="new-password"></div>
-        <div class="gate-actions">
-          <button id="gateSubmitBtn" type="button" class="btn btn-fill">Войти и отправить</button>
-          <button id="gateCancelBtn" type="button" class="btn btn-line">Назад</button>
-        </div>
-        <div class="gate-switch"><span id="gateToRegisterRow">Ещё нет входа? <a id="gateToRegister">Зарегистрироваться</a></span><span id="gateToLoginRow" hidden>Уже есть вход? <a id="gateToLogin">Войти</a></span></div>
-      </div>
     </div>
     <div>
       <span class="label">Контакты</span>
@@ -1021,96 +1010,6 @@
     sync();
   }
 
-  // contact form gate: form is shown right away; login/registration is asked
-  // only at the moment of submitting, after the fields are already filled in
-  (function(){
-    var gate = document.getElementById('leadGate');
-    var leadForm = document.getElementById('leadForm');
-    if(!gate || !leadForm) return;
-
-    var gcfg = window.FIREBASE_CONFIG || {};
-    var gReady = window.firebase && gcfg.apiKey && gcfg.apiKey.indexOf('ВСТАВЬТЕ') !== 0;
-    if(!gReady) return; // Firebase not wired up yet — let the form submit normally
-
-    var gApp = firebase.apps && firebase.apps.length ? firebase.apps[0] : firebase.initializeApp(gcfg);
-    var gAuth = firebase.auth();
-    var gateMsg = document.getElementById('gateMsg');
-    var showGateMsg = function(text){ gateMsg.innerHTML = text ? '<div class="gate-msg error">' + text + '</div>' : ''; };
-
-    var gMode = 'login';
-    var confirmField = document.getElementById('gConfirmField');
-    var submitBtn = document.getElementById('gateSubmitBtn');
-    var cancelBtn = document.getElementById('gateCancelBtn');
-    var toRegisterRow = document.getElementById('gateToRegisterRow');
-    var toLoginRow = document.getElementById('gateToLoginRow');
-    var pendingSubmit = false;
-
-    var setGateMode = function(m){
-      gMode = m;
-      showGateMsg('');
-      if(m === 'register'){
-        submitBtn.textContent = 'Зарегистрироваться и отправить';
-        confirmField.hidden = false;
-        toRegisterRow.hidden = true;
-        toLoginRow.hidden = false;
-      } else {
-        submitBtn.textContent = 'Войти и отправить';
-        confirmField.hidden = true;
-        toRegisterRow.hidden = false;
-        toLoginRow.hidden = true;
-      }
-    };
-    document.getElementById('gateToRegister').addEventListener('click', function(){ setGateMode('register'); });
-    document.getElementById('gateToLogin').addEventListener('click', function(){ setGateMode('login'); });
-
-    cancelBtn.addEventListener('click', function(){
-      pendingSubmit = false;
-      gate.hidden = true;
-      leadForm.hidden = false;
-    });
-
-    // intercept submit only while logged out; already-authenticated visitors submit normally
-    leadForm.addEventListener('submit', function(e){
-      if(gAuth.currentUser) return; // allow the real submit through
-      e.preventDefault();
-      pendingSubmit = true;
-      leadForm.hidden = true;
-      gate.hidden = false;
-      showGateMsg('');
-    });
-
-    submitBtn.addEventListener('click', function(){
-      var email = document.getElementById('g-email').value.trim();
-      var pass = document.getElementById('g-pass').value;
-      if(!email || !pass){ showGateMsg('Введите почту и пароль.'); return; }
-      if(gMode === 'register'){
-        var pass2 = document.getElementById('g-pass2').value;
-        if(pass.length < 6){ showGateMsg('Пароль должен быть не короче 6 символов.'); return; }
-        if(pass !== pass2){ showGateMsg('Пароли не совпадают.'); return; }
-        showGateMsg('');
-        gAuth.createUserWithEmailAndPassword(email, pass).catch(function(err){
-          var t = 'Не удалось зарегистрироваться.';
-          if(err.code === 'auth/email-already-in-use') t = 'Такая почта уже зарегистрирована — войдите.';
-          showGateMsg(t);
-        });
-      } else {
-        showGateMsg('');
-        gAuth.signInWithEmailAndPassword(email, pass).catch(function(){
-          showGateMsg('Не удалось войти: неверная почта или пароль.');
-        });
-      }
-    });
-    document.getElementById('g-pass').addEventListener('keydown', function(e){ if(e.key === 'Enter') submitBtn.click(); });
-
-    gAuth.onAuthStateChanged(function(user){
-      if(user && pendingSubmit){
-        pendingSubmit = false;
-        gate.hidden = true;
-        leadForm.hidden = false;
-        leadForm.submit(); // DOM submit() doesn't re-trigger the 'submit' listener above
-      }
-    });
-  })();
 })();
 </script>
 </body>
