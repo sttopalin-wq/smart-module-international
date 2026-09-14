@@ -305,9 +305,21 @@
           (p.image ? '<img src="' + p.image + '" alt="">' : '<div class="ph">без фото</div>') +
           '<div class="info"><div class="date">' + (p.date||'') + '</div><h3>' + (p.title||'') + '</h3><p>' + (p.excerpt||'') + '</p></div>' +
           '<button class="del-btn" type="button">Удалить</button>';
-        row.querySelector('.del-btn').addEventListener('click', function(){
+        var delBtn = row.querySelector('.del-btn');
+        delBtn.addEventListener('click', function(){
           if(!confirm('Удалить новость «' + p.title + '»?')) return;
-          db.collection('news').doc(doc.id).delete().then(loadPosts);
+          delBtn.disabled = true;
+          delBtn.textContent = 'Удаляем…';
+          db.collection('news').doc(doc.id).delete().then(function(){
+            loadPosts();
+          }).catch(function(err){
+            delBtn.disabled = false;
+            delBtn.textContent = 'Удалить';
+            var text = 'Не удалось удалить: ' + err.message;
+            if(err.code === 'permission-denied') text = 'Не удалось удалить: нет прав. Скорее всего, правило Firestore ограничено под другой аккаунт — проверьте, тем ли логином вы вошли.';
+            showMsg(formMsg, text, 'error');
+            console.error(err);
+          });
         });
         list.appendChild(row);
       });
