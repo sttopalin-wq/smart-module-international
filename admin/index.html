@@ -63,6 +63,11 @@
   .del-btn:hover{background:#FDECEC;}
   .empty{color:var(--muted); font-size:14px; padding:16px 0;}
   .config-warning{max-width:520px; margin:60px auto; background:#FFF6E5; border:1px solid #F2D98A; color:#7A5B00; padding:20px 22px; border-radius:6px; font-size:14px; line-height:1.6;}
+  .uid-banner{background:#EAF3FE; border:1px solid #BFDCF7; color:#0B4A85; padding:16px 18px; border-radius:6px; font-size:13.5px; line-height:1.6; margin-bottom:28px;}
+  .uid-banner .row{display:flex; align-items:center; gap:10px; margin-top:8px; flex-wrap:wrap;}
+  .uid-banner code{background:#fff; border:1px solid #BFDCF7; border-radius:3px; padding:5px 10px; font-family:'IBM Plex Mono',monospace; font-size:12.5px; word-break:break-all;}
+  .uid-banner button{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#0B4A85; background:#fff; border:1px solid #BFDCF7; border-radius:3px; padding:6px 10px; cursor:pointer; flex:none;}
+  .uid-banner button:hover{background:#DCEBFB;}
 </style>
 </head>
 <body>
@@ -96,6 +101,13 @@
 </div>
 
 <div id="adminView" hidden>
+  <div class="uid-banner">
+    Пока публиковать новости может любой, кто зарегистрируется. Чтобы это исправить, пришлите разработчику ваш ID (UID) — он ограничит запись только под этот аккаунт:
+    <div class="row">
+      <code id="uidValue">—</code>
+      <button type="button" id="copyUidBtn">Скопировать</button>
+    </div>
+  </div>
   <div class="panel">
     <h2>Добавить новость</h2>
     <div id="formMsg"></div>
@@ -149,11 +161,23 @@
       loginView.hidden = true;
       adminView.hidden = false;
       signOutBtn.hidden = false;
+      document.getElementById('uidValue').textContent = user.uid;
       loadPosts();
     } else {
       loginView.hidden = false;
       adminView.hidden = true;
       signOutBtn.hidden = true;
+    }
+  });
+
+  document.getElementById('copyUidBtn').addEventListener('click', function(){
+    var uid = document.getElementById('uidValue').textContent;
+    var btn = this;
+    var done = function(){ var old = btn.textContent; btn.textContent = 'Скопировано'; setTimeout(function(){ btn.textContent = old; }, 1500); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(uid).then(done).catch(function(){ prompt('Скопируйте ID вручную:', uid); });
+    } else {
+      prompt('Скопируйте ID вручную:', uid);
     }
   });
 
