@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://smart-module-international.ru/sitemap.xml
+Sitemap: https://smart-moduli.ru/sitemap.xml
