@@ -156,6 +156,10 @@
     el.innerHTML = text ? '<div class="msg ' + type + '">' + text + '</div>' : '';
   }
 
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
+  }
+
   auth.onAuthStateChanged(function(user){
     if(user){
       loginView.hidden = true;
@@ -302,8 +306,8 @@
         var row = document.createElement('div');
         row.className = 'post-item';
         row.innerHTML =
-          (p.image ? '<img src="' + p.image + '" alt="">' : '<div class="ph">без фото</div>') +
-          '<div class="info"><div class="date">' + (p.date||'') + '</div><h3>' + (p.title||'') + '</h3><p>' + (p.excerpt||'') + '</p></div>' +
+          (p.image ? '<img src="' + esc(p.image) + '" alt="">' : '<div class="ph">без фото</div>') +
+          '<div class="info"><div class="date">' + esc(p.date) + '</div><h3>' + esc(p.title) + '</h3><p>' + esc(p.excerpt) + '</p></div>' +
           '<button class="del-btn" type="button">Удалить</button>';
         var delBtn = row.querySelector('.del-btn');
         delBtn.addEventListener('click', function(){

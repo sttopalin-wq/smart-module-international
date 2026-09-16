@@ -804,7 +804,7 @@
 
 <footer>
   <div class="wrap foot-row">
-    <div class="brand">SMI <span>/</span> SMART MODULE INTERNATIONAL</div>
+    <div class="brand"><span class="brand-full">SMI <span>/</span> SMART MODULE INTERNATIONAL</span><span class="brand-short">SMI <span>/</span> SMART MODULE</span></div>
     <div class="legal">ОГРН 1265000036168 · ИНН 5031164520 · КПП 503101001 · <a href="privacy.html" style="color:inherit;">Политика конфиденциальности</a></div>
   </div>
 </footer>
@@ -924,6 +924,7 @@
           .then(function(snap){
             var posts = [];
             snap.forEach(function(doc){ posts.push(doc.data()); });
+            if(!posts.length) return loadFromJson();
             renderPosts(posts);
           })
           .catch(function(err){ console.error('Firestore news load failed, falling back to news.json:', err); return loadFromJson(); });
