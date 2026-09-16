@@ -75,9 +75,10 @@
   .navrow{display:flex; align-items:center; justify-content:space-between; padding:28px 0;}
   header.scrolled .navrow{padding:16px 0;}
   header.scrolled{background:rgba(247,249,252,.92); backdrop-filter:blur(10px); border-bottom:1px solid var(--line);}
-  .brand{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; letter-spacing:.04em; color:#fff; transition:color .35s ease;}
+  .brand{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; letter-spacing:.04em; color:#fff; transition:color .35s ease; white-space:nowrap;}
   header.scrolled .brand{color:var(--graphite);}
   .brand span{color:var(--electric);}
+  .brand .brand-short{display:none;}
   .navlinks{display:flex; gap:36px; font-size:14px; font-weight:500;}
   .navlinks a{text-decoration:none; color:rgba(255,255,255,.82); transition:color .2s;}
   header.scrolled .navlinks a{color:var(--graphite);}
@@ -343,7 +344,10 @@
     .comm-wrap{grid-template-columns:1fr; padding:28px;}
     .hero-tags{display:none;}
     .hero-person, .hero-person-shadow{display:none;}
-    .hero-inner{max-width:100%;}
+    .hero-inner{max-width:100%; padding:150px 0 100px;}
+    .coord{display:none;}
+    .brand .brand-full{display:none;}
+    .brand .brand-short{display:inline;}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -359,7 +363,7 @@
 
 <header id="siteHeader">
   <div class="wrap navrow">
-    <div class="brand">SMI <span>/</span> SMART MODULE INTERNATIONAL</div>
+    <div class="brand"><span class="brand-full">SMI <span>/</span> SMART MODULE INTERNATIONAL</span><span class="brand-short">SMI <span>/</span> SMART MODULE</span></div>
     <nav class="navlinks">
       <a href="#services">Услуги</a>
       <a href="#process">Решения</a>
@@ -791,6 +795,7 @@
       <dl class="req">
         <dt>Телефон</dt><dd>8 (916) 000-16-68</dd>
         <dt>Электронная почта</dt><dd>sm.international@yandex.ru</dd>
+        <dt>Мессенджер MAX</dt><dd><a href="https://max.ru/u/f9LHodD0cOJYjSh9GWINgpRRyFkBVMzB52m5vnbSUNR0hq9nfmsF-V6nmDY" target="_blank" rel="noopener" style="color:var(--tech-blue); text-decoration:none;">Написать в MAX →</a></dd>
         <dt>Организация</dt><dd>ООО «СМИ» (Смарт Модуль Интернэшнл)</dd>
       </dl>
     </div>
